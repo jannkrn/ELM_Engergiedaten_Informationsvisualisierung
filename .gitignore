@@ -1,0 +1,16 @@
+# Elm und JavaScript
+/elm-stuff/
+/dist/
+/node_modules/
+
+# Zugangsdaten
+.env
+.env.*
+!.env.example
+
+# Temporäre Dateien
+~$*.docx
+*.log
+.DS_Store
+Thumbs.db
+
