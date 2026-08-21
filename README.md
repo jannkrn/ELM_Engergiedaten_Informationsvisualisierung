@@ -1,32 +1,61 @@
 # Deutschlands Rolle im europäischen Stromnetz
 
-Elm-Projekt für eine interaktiv verknüpfte Visual-Analytics-Anwendung zu
-physischen Stromflüssen, Erzeugungsmix und Strompreisen in Europa.
+Elm-Prototyp einer Visual-Analytics-Anwendung für physische Stromflüsse,
+Erzeugungsmix und Strompreise. Drei Ansichten sind über einen gemeinsamen
+Auswahlzustand verbunden:
 
-## Ordnerstruktur
+1. gerichtete Chord-/Flussansicht,
+2. gestapelte Zeitreihe,
+3. Pixelmatrix.
+
+## Projektstruktur
 
 ```text
-src/                    Elm-Quellcode
-  View/                 Chord-, Zeitreihen- und Pixelmatrix-Ansichten
-public/                 Dateien für die Webauslieferung
-  data/                 per HTTP geladene Datensätze/Testdaten
-  assets/               CSS, Bilder und sonstige Webressourcen
-scripts/                Datenabruf und Datenaufbereitung
-experiments/
-  figures/              Abbildungen aus Vorversuchen
-  results/              Messwerte und Versuchsergebnisse
-report/
-  zwischenstaende/      eingereichte Zwischenstände als PDF
-  entwuerfe/            bearbeitbare Berichtsentwürfe
-  abbildungen/           Abbildungen für den Bericht
-material/               Aufgabenstellung, Vorlagen und Feedback
-tests/                  Tests und kleine Testdatensätze
+src/                     Elm-Quellcode
+  Api.elm                HTTP-Laden und JSON-Decoder
+  Domain.elm             gemeinsame Datentypen
+  Main.elm               Model, Update und Seitenaufbau
+  View/                   drei SVG-Visualisierungen
+public/                  auslieferbare Webanwendung
+  data/energy.json        normalisierter HTTP-Datensatz
+scripts/                 PostgREST-Prüfung und Datenexport
+docs/                    Daten- und Implementierungsdokumentation
+experiments/             Screenshots und Versuchsergebnisse
+report/                  Zwischenstände, Entwürfe und Abbildungen
+material/                Aufgabenstellung, Vorlagen und Feedback
 ```
 
-## Projektregeln
+## Build und lokaler Start
 
-- Produktive Daten werden über HTTP geladen.
-- Zugangstoken und Passwörter werden niemals eingecheckt.
-- Die drei Ansichten verwenden einen gemeinsamen Auswahl- und Zeitstatus.
-- Vor einem Commit muss die Elm-Anwendung ohne Fehler kompilieren.
+```powershell
+elm make src/Main.elm --output=public/elm.js
+python -m http.server 8765 --directory public
+```
 
+Danach wird die Anwendung unter `http://127.0.0.1:8765/` geöffnet. Die Datei
+`public/data/energy.json` wird von Elm per HTTP geladen und nicht in den
+Quellcode eingebettet.
+
+## Datenstatus
+
+Der verwendete Seminar-Endpunkt lautet:
+
+```text
+https://dbs.informatik.uni-halle.de/sciencedata
+```
+
+Mit `Accept-Profile: energycharts` sind 66 Tabellen und Views sichtbar. Der
+aktuelle Datensatz wurde mit begrenzten PostgREST-Abfragen aus `v_cbpf`,
+`v_cbet`, `v_price` und `v_totalpower` erzeugt. Er umfasst 48 Stunden des
+01.-02.01.2025 und elf Partnerländer. Der Export ist über
+`scripts/build_postgrest_fixture.py` reproduzierbar.
+
+Details stehen in [docs/DATENQUELLEN.md](docs/DATENQUELLEN.md).
+
+## Sicherheit
+
+- Tokens und Passwörter werden nicht gespeichert oder eingecheckt.
+- Ein Bearer-Token darf nicht in Elm eingebettet werden, da Browsercode
+  öffentlich einsehbar ist.
+- Der sichere Weg für GitLab Pages ist ein vorab erzeugter JSON-Export, der
+  anschließend als statische Datei per HTTP geladen wird.

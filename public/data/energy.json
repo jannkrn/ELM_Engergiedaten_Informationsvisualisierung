@@ -1,0 +1,3271 @@
+{
+  "source": "Energy-Charts · PostgreSQL/PostgREST",
+  "sourceStatus": "Schema energycharts · Views v_cbpf, v_cbet, v_price, v_totalpower",
+  "period": "01.-02. Januar 2025 (UTC)",
+  "samples": [
+    {
+      "timestamp": 1735689600,
+      "label": "01.01. 00 h",
+      "generation": {
+        "renewables": 40.931,
+        "coal": 6.462,
+        "gas": 5.231,
+        "other": 3.439
+      },
+      "price": 1.6,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -2.454,
+          "trade": -3.002
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.108,
+          "trade": -1.126
+        },
+        {
+          "country": "Denmark",
+          "value": 0.885,
+          "trade": 0.9
+        },
+        {
+          "country": "France",
+          "value": -0.593,
+          "trade": -0.928
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.515,
+          "trade": -0.537
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.771,
+          "trade": 3.133
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.593,
+          "trade": -0.65
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.594,
+          "trade": -1.991
+        }
+      ]
+    },
+    {
+      "timestamp": 1735693200,
+      "label": "01.01. 01 h",
+      "generation": {
+        "renewables": 41.321,
+        "coal": 5.976,
+        "gas": 5.099,
+        "other": 3.262
+      },
+      "price": 0.0,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -2.375,
+          "trade": -2.536
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.11,
+          "trade": -1.041
+        },
+        {
+          "country": "Denmark",
+          "value": 0.938,
+          "trade": 0.968
+        },
+        {
+          "country": "France",
+          "value": -0.152,
+          "trade": -1.72
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.453,
+          "trade": -0.526
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.844,
+          "trade": 2.73
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.589,
+          "trade": -0.585
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.756,
+          "trade": -1.015
+        }
+      ]
+    },
+    {
+      "timestamp": 1735696800,
+      "label": "01.01. 02 h",
+      "generation": {
+        "renewables": 39.501,
+        "coal": 5.861,
+        "gas": 5.174,
+        "other": 3.306
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.497,
+          "trade": -1.253
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.926,
+          "trade": -0.382
+        },
+        {
+          "country": "Denmark",
+          "value": 0.939,
+          "trade": 1.052
+        },
+        {
+          "country": "France",
+          "value": 0.484,
+          "trade": -1.293
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.431,
+          "trade": -0.529
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.591,
+          "trade": 1.408
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.543,
+          "trade": -0.858
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.214,
+          "trade": 0.255
+        }
+      ]
+    },
+    {
+      "timestamp": 1735700400,
+      "label": "01.01. 03 h",
+      "generation": {
+        "renewables": 39.36,
+        "coal": 5.818,
+        "gas": 5.24,
+        "other": 3.195
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.014,
+          "trade": 0.414
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.265,
+          "trade": 0.653
+        },
+        {
+          "country": "Denmark",
+          "value": 0.782,
+          "trade": 0.814
+        },
+        {
+          "country": "France",
+          "value": 0.639,
+          "trade": -0.758
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.502,
+          "trade": -0.546
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.846,
+          "trade": 1.034
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.305,
+          "trade": -0.654
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.589,
+          "trade": 2.56
+        }
+      ]
+    },
+    {
+      "timestamp": 1735704000,
+      "label": "01.01. 04 h",
+      "generation": {
+        "renewables": 39.625,
+        "coal": 5.628,
+        "gas": 5.396,
+        "other": 3.189
+      },
+      "price": -0.06,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.249,
+          "trade": 1.835
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 1.289,
+          "trade": 1.991
+        },
+        {
+          "country": "Denmark",
+          "value": 0.807,
+          "trade": 0.685
+        },
+        {
+          "country": "France",
+          "value": 0.966,
+          "trade": 0.101
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.667,
+          "trade": -0.564
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.841,
+          "trade": 1.026
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.531,
+          "trade": 0.409
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.191,
+          "trade": 3.008
+        }
+      ]
+    },
+    {
+      "timestamp": 1735707600,
+      "label": "01.01. 05 h",
+      "generation": {
+        "renewables": 41.417,
+        "coal": 5.51,
+        "gas": 5.413,
+        "other": 3.193
+      },
+      "price": -0.09,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.791,
+          "trade": 1.87
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 1.44,
+          "trade": 2.168
+        },
+        {
+          "country": "Denmark",
+          "value": 0.484,
+          "trade": 0.437
+        },
+        {
+          "country": "France",
+          "value": 0.863,
+          "trade": 0.912
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.682,
+          "trade": -0.566
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.073,
+          "trade": 1.447
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.491,
+          "trade": 0.495
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.954,
+          "trade": 3.068
+        }
+      ]
+    },
+    {
+      "timestamp": 1735711200,
+      "label": "01.01. 06 h",
+      "generation": {
+        "renewables": 42.463,
+        "coal": 5.252,
+        "gas": 5.351,
+        "other": 3.27
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.477,
+          "trade": 1.849
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 1.412,
+          "trade": 2.181
+        },
+        {
+          "country": "Denmark",
+          "value": 0.841,
+          "trade": 0.846
+        },
+        {
+          "country": "France",
+          "value": 0.42,
+          "trade": -0.393
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.665,
+          "trade": -0.55
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.271,
+          "trade": 0.885
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.505,
+          "trade": 0.159
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.617,
+          "trade": 3.027
+        }
+      ]
+    },
+    {
+      "timestamp": 1735714800,
+      "label": "01.01. 07 h",
+      "generation": {
+        "renewables": 44.34,
+        "coal": 5.117,
+        "gas": 4.933,
+        "other": 3.217
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.948,
+          "trade": 1.022
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.941,
+          "trade": 1.276
+        },
+        {
+          "country": "Denmark",
+          "value": 0.664,
+          "trade": 0.651
+        },
+        {
+          "country": "France",
+          "value": 0.403,
+          "trade": 0.253
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.591,
+          "trade": -0.509
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.314,
+          "trade": 1.031
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.858,
+          "trade": -0.035
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 2.563,
+          "trade": 2.121
+        }
+      ]
+    },
+    {
+      "timestamp": 1735718400,
+      "label": "01.01. 08 h",
+      "generation": {
+        "renewables": 48.257,
+        "coal": 5.083,
+        "gas": 4.847,
+        "other": 3.213
+      },
+      "price": -0.04,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.415,
+          "trade": 0.734
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.28,
+          "trade": 0.005
+        },
+        {
+          "country": "Denmark",
+          "value": 1.055,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.434,
+          "trade": 0.745
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.586,
+          "trade": -0.48
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.322,
+          "trade": 1.942
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.577,
+          "trade": -0.928
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.738,
+          "trade": 0.173
+        }
+      ]
+    },
+    {
+      "timestamp": 1735722000,
+      "label": "01.01. 09 h",
+      "generation": {
+        "renewables": 55.759,
+        "coal": 5.135,
+        "gas": 4.821,
+        "other": 3.217
+      },
+      "price": -0.03,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.381,
+          "trade": -1.057
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.305,
+          "trade": 0.297
+        },
+        {
+          "country": "Denmark",
+          "value": 1.072,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.011,
+          "trade": 0.1
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.577,
+          "trade": -0.455
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.536,
+          "trade": 2.818
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.498,
+          "trade": -0.924
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.765,
+          "trade": -0.844
+        }
+      ]
+    },
+    {
+      "timestamp": 1735725600,
+      "label": "01.01. 10 h",
+      "generation": {
+        "renewables": 60.369,
+        "coal": 5.132,
+        "gas": 4.798,
+        "other": 3.274
+      },
+      "price": -0.1,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.972,
+          "trade": -1.019
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.704,
+          "trade": 0.371
+        },
+        {
+          "country": "Denmark",
+          "value": 1.041,
+          "trade": 1.065
+        },
+        {
+          "country": "France",
+          "value": -0.161,
+          "trade": -0.666
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.499,
+          "trade": -0.427
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.908,
+          "trade": 2.809
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.018,
+          "trade": 0.232
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.288,
+          "trade": -1.594
+        }
+      ]
+    },
+    {
+      "timestamp": 1735729200,
+      "label": "01.01. 11 h",
+      "generation": {
+        "renewables": 62.867,
+        "coal": 5.149,
+        "gas": 4.408,
+        "other": 3.265
+      },
+      "price": -0.05,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.695,
+          "trade": -0.083
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.988,
+          "trade": 0.745
+        },
+        {
+          "country": "Denmark",
+          "value": 1.097,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.031,
+          "trade": -0.002
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.508,
+          "trade": -0.408
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.691,
+          "trade": 0.355
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.709,
+          "trade": 0.331
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.421,
+          "trade": -0.564
+        }
+      ]
+    },
+    {
+      "timestamp": 1735732800,
+      "label": "01.01. 12 h",
+      "generation": {
+        "renewables": 62.063,
+        "coal": 5.108,
+        "gas": 4.38,
+        "other": 3.343
+      },
+      "price": -0.1,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.593,
+          "trade": 0.043
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.715,
+          "trade": 0.258
+        },
+        {
+          "country": "Denmark",
+          "value": 1.103,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.444,
+          "trade": -0.36
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.416,
+          "trade": -0.405
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.884,
+          "trade": 1.636
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.779,
+          "trade": 0.152
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.192,
+          "trade": -0.485
+        }
+      ]
+    },
+    {
+      "timestamp": 1735736400,
+      "label": "01.01. 13 h",
+      "generation": {
+        "renewables": 58.051,
+        "coal": 5.145,
+        "gas": 4.369,
+        "other": 3.248
+      },
+      "price": -1.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.507,
+          "trade": -0.079
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.756,
+          "trade": 0.639
+        },
+        {
+          "country": "Denmark",
+          "value": 1.1,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.857,
+          "trade": -0.895
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.379,
+          "trade": -0.405
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.213,
+          "trade": 1.984
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.815,
+          "trade": 0.019
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.027,
+          "trade": 0.491
+        }
+      ]
+    },
+    {
+      "timestamp": 1735740000,
+      "label": "01.01. 14 h",
+      "generation": {
+        "renewables": 55.123,
+        "coal": 5.201,
+        "gas": 4.341,
+        "other": 3.258
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.518,
+          "trade": -0.259
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.507,
+          "trade": 0.163
+        },
+        {
+          "country": "Denmark",
+          "value": 1.085,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.381,
+          "trade": 0.315
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.352,
+          "trade": -0.412
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.715,
+          "trade": 2.11
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.989,
+          "trade": 0.12
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.367,
+          "trade": 1.032
+        }
+      ]
+    },
+    {
+      "timestamp": 1735743600,
+      "label": "01.01. 15 h",
+      "generation": {
+        "renewables": 52.021,
+        "coal": 5.347,
+        "gas": 4.403,
+        "other": 3.659
+      },
+      "price": -0.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.501,
+          "trade": -0.859
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.103,
+          "trade": -0.041
+        },
+        {
+          "country": "Denmark",
+          "value": 1.097,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.782,
+          "trade": 0.701
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.382,
+          "trade": -0.444
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.222,
+          "trade": 2.331
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.309,
+          "trade": -0.141
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.627,
+          "trade": 1.692
+        }
+      ]
+    },
+    {
+      "timestamp": 1735747200,
+      "label": "01.01. 16 h",
+      "generation": {
+        "renewables": 53.77,
+        "coal": 5.67,
+        "gas": 4.462,
+        "other": 3.605
+      },
+      "price": 0.07,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.39,
+          "trade": -0.382
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.232,
+          "trade": 0.727
+        },
+        {
+          "country": "Denmark",
+          "value": 1.048,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 2.514,
+          "trade": 2.455
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.36,
+          "trade": -0.497
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.784,
+          "trade": 2.558
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.108,
+          "trade": 0.028
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 2.356,
+          "trade": 1.942
+        }
+      ]
+    },
+    {
+      "timestamp": 1735750800,
+      "label": "01.01. 17 h",
+      "generation": {
+        "renewables": 53.148,
+        "coal": 5.953,
+        "gas": 4.471,
+        "other": 3.686
+      },
+      "price": 1.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.851,
+          "trade": 1.289
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.862,
+          "trade": 1.288
+        },
+        {
+          "country": "Denmark",
+          "value": 0.156,
+          "trade": 0.226
+        },
+        {
+          "country": "France",
+          "value": 2.083,
+          "trade": 2.628
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.429,
+          "trade": -0.544
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.558,
+          "trade": 1.019
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.579,
+          "trade": 0.271
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.411,
+          "trade": 2.134
+        }
+      ]
+    },
+    {
+      "timestamp": 1735754400,
+      "label": "01.01. 18 h",
+      "generation": {
+        "renewables": 52.05,
+        "coal": 6.08,
+        "gas": 4.511,
+        "other": 3.609
+      },
+      "price": 1.48,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.475,
+          "trade": 1.668
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.84,
+          "trade": 1.068
+        },
+        {
+          "country": "Denmark",
+          "value": 0.188,
+          "trade": 0.186
+        },
+        {
+          "country": "France",
+          "value": 1.209,
+          "trade": 0.73
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.51,
+          "trade": -0.562
+        },
+        {
+          "country": "Netherlands",
+          "value": 0.554,
+          "trade": 0.368
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.702,
+          "trade": 0.158
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.009,
+          "trade": 1.758
+        }
+      ]
+    },
+    {
+      "timestamp": 1735758000,
+      "label": "01.01. 19 h",
+      "generation": {
+        "renewables": 51.715,
+        "coal": 6.096,
+        "gas": 4.335,
+        "other": 3.541
+      },
+      "price": 1.0,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.178,
+          "trade": 0.668
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.455,
+          "trade": 0.693
+        },
+        {
+          "country": "Denmark",
+          "value": 0.096,
+          "trade": 0.093
+        },
+        {
+          "country": "France",
+          "value": -0.006,
+          "trade": -1.489
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.648,
+          "trade": -0.567
+        },
+        {
+          "country": "Netherlands",
+          "value": 0.121,
+          "trade": -0.681
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.033,
+          "trade": -0.016
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.845,
+          "trade": 2.015
+        }
+      ]
+    },
+    {
+      "timestamp": 1735761600,
+      "label": "01.01. 20 h",
+      "generation": {
+        "renewables": 50.428,
+        "coal": 6.185,
+        "gas": 4.307,
+        "other": 3.716
+      },
+      "price": 0.07,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.22,
+          "trade": -0.87
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.447,
+          "trade": -0.209
+        },
+        {
+          "country": "Denmark",
+          "value": 0.488,
+          "trade": 0.501
+        },
+        {
+          "country": "France",
+          "value": 0.034,
+          "trade": -0.926
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.579,
+          "trade": -0.561
+        },
+        {
+          "country": "Netherlands",
+          "value": 0.863,
+          "trade": 1.045
+        },
+        {
+          "country": "Norway",
+          "value": -0.013,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.148,
+          "trade": -0.775
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.639,
+          "trade": 0.207
+        }
+      ]
+    },
+    {
+      "timestamp": 1735765200,
+      "label": "01.01. 21 h",
+      "generation": {
+        "renewables": 48.518,
+        "coal": 6.265,
+        "gas": 4.269,
+        "other": 3.692
+      },
+      "price": 10.05,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.888,
+          "trade": -1.747
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.013,
+          "trade": -0.761
+        },
+        {
+          "country": "Denmark",
+          "value": 0.763,
+          "trade": 0.749
+        },
+        {
+          "country": "France",
+          "value": -0.089,
+          "trade": -0.019
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.588,
+          "trade": -0.557
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.429,
+          "trade": 1.882
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.242,
+          "trade": -0.97
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.459,
+          "trade": -1.823
+        }
+      ]
+    },
+    {
+      "timestamp": 1735768800,
+      "label": "01.01. 22 h",
+      "generation": {
+        "renewables": 48.615,
+        "coal": 6.283,
+        "gas": 4.263,
+        "other": 3.639
+      },
+      "price": 7.01,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -2.058,
+          "trade": -2.995
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.248,
+          "trade": -0.961
+        },
+        {
+          "country": "Denmark",
+          "value": 1.04,
+          "trade": 1.058
+        },
+        {
+          "country": "France",
+          "value": -0.129,
+          "trade": 0.0
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.539,
+          "trade": -0.542
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.97,
+          "trade": 3.296
+        },
+        {
+          "country": "Norway",
+          "value": -0.002,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.302,
+          "trade": -0.913
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.423,
+          "trade": -1.59
+        }
+      ]
+    },
+    {
+      "timestamp": 1735772400,
+      "label": "01.01. 23 h",
+      "generation": {
+        "renewables": 46.64,
+        "coal": 6.654,
+        "gas": 4.308,
+        "other": 3.838
+      },
+      "price": 2.55,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -2.069,
+          "trade": -3.329
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.201,
+          "trade": -0.873
+        },
+        {
+          "country": "Denmark",
+          "value": 1.049,
+          "trade": 1.031
+        },
+        {
+          "country": "France",
+          "value": 0.125,
+          "trade": 0.0
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.465,
+          "trade": -0.531
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.005,
+          "trade": 3.365
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.273,
+          "trade": -0.762
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.809,
+          "trade": -1.576
+        }
+      ]
+    },
+    {
+      "timestamp": 1735776000,
+      "label": "02.01. 00 h",
+      "generation": {
+        "renewables": 45.835,
+        "coal": 6.755,
+        "gas": 4.046,
+        "other": 3.559
+      },
+      "price": 1.56,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -2.3,
+          "trade": -3.48
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.276,
+          "trade": -0.904
+        },
+        {
+          "country": "Denmark",
+          "value": 1.068,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.206,
+          "trade": 0.0
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.528,
+          "trade": -0.524
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.246,
+          "trade": 3.541
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.279,
+          "trade": -0.714
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.715,
+          "trade": -1.575
+        }
+      ]
+    },
+    {
+      "timestamp": 1735779600,
+      "label": "02.01. 01 h",
+      "generation": {
+        "renewables": 44.259,
+        "coal": 6.416,
+        "gas": 4.099,
+        "other": 3.542
+      },
+      "price": 3.45,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.838,
+          "trade": -2.425
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.408,
+          "trade": -0.942
+        },
+        {
+          "country": "Denmark",
+          "value": 0.742,
+          "trade": 0.752
+        },
+        {
+          "country": "France",
+          "value": 0.17,
+          "trade": 0.321
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.579,
+          "trade": -0.517
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.726,
+          "trade": 1.399
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.295,
+          "trade": -0.825
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.051,
+          "trade": -0.086
+        }
+      ]
+    },
+    {
+      "timestamp": 1735783200,
+      "label": "02.01. 02 h",
+      "generation": {
+        "renewables": 43.094,
+        "coal": 6.319,
+        "gas": 4.217,
+        "other": 3.543
+      },
+      "price": 7.02,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.039,
+          "trade": -0.985
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.024,
+          "trade": -0.639
+        },
+        {
+          "country": "Denmark",
+          "value": 0.561,
+          "trade": 0.562
+        },
+        {
+          "country": "France",
+          "value": 0.389,
+          "trade": 0.484
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.514,
+          "trade": -0.532
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.231,
+          "trade": 0.36
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.95,
+          "trade": -0.425
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.172,
+          "trade": 0.79
+        }
+      ]
+    },
+    {
+      "timestamp": 1735786800,
+      "label": "02.01. 03 h",
+      "generation": {
+        "renewables": 40.915,
+        "coal": 6.994,
+        "gas": 4.937,
+        "other": 3.278
+      },
+      "price": 12.75,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.126,
+          "trade": -0.356
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.257,
+          "trade": 0.039
+        },
+        {
+          "country": "Denmark",
+          "value": 0.375,
+          "trade": 0.409
+        },
+        {
+          "country": "France",
+          "value": 1.183,
+          "trade": 1.7
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.441,
+          "trade": -0.55
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.82,
+          "trade": 1.477
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.728,
+          "trade": 0.083
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 2.165,
+          "trade": 1.845
+        }
+      ]
+    },
+    {
+      "timestamp": 1735790400,
+      "label": "02.01. 04 h",
+      "generation": {
+        "renewables": 39.552,
+        "coal": 7.528,
+        "gas": 6.19,
+        "other": 3.391
+      },
+      "price": 30.07,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.112,
+          "trade": 1.519
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.938,
+          "trade": 1.868
+        },
+        {
+          "country": "Denmark",
+          "value": 0.068,
+          "trade": 0.011
+        },
+        {
+          "country": "France",
+          "value": 1.421,
+          "trade": 1.561
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.53,
+          "trade": -0.568
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.157,
+          "trade": 1.763
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.474,
+          "trade": 0.017
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 2.915,
+          "trade": 1.912
+        }
+      ]
+    },
+    {
+      "timestamp": 1735794000,
+      "label": "02.01. 05 h",
+      "generation": {
+        "renewables": 39.133,
+        "coal": 9.528,
+        "gas": 7.507,
+        "other": 3.501
+      },
+      "price": 67.13,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.606,
+          "trade": 3.502
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 1.142,
+          "trade": 0.93
+        },
+        {
+          "country": "Denmark",
+          "value": 0.807,
+          "trade": 0.818
+        },
+        {
+          "country": "France",
+          "value": 1.487,
+          "trade": 1.544
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.512,
+          "trade": -0.567
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.536,
+          "trade": 1.286
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.39,
+          "trade": 0.265
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.835,
+          "trade": 2.136
+        }
+      ]
+    },
+    {
+      "timestamp": 1735797600,
+      "label": "02.01. 06 h",
+      "generation": {
+        "renewables": 36.568,
+        "coal": 11.781,
+        "gas": 9.195,
+        "other": 3.821
+      },
+      "price": 98.83,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 1.33,
+          "trade": 2.178
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 1.273,
+          "trade": 1.781
+        },
+        {
+          "country": "Denmark",
+          "value": 0.41,
+          "trade": 0.35
+        },
+        {
+          "country": "France",
+          "value": 1.129,
+          "trade": 1.196
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.554,
+          "trade": -0.554
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.722,
+          "trade": 1.419
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.511,
+          "trade": -0.35
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 3.266,
+          "trade": 2.117
+        }
+      ]
+    },
+    {
+      "timestamp": 1735801200,
+      "label": "02.01. 07 h",
+      "generation": {
+        "renewables": 33.987,
+        "coal": 13.629,
+        "gas": 10.396,
+        "other": 4.67
+      },
+      "price": 121.53,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": 0.879,
+          "trade": 0.575
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.848,
+          "trade": 1.066
+        },
+        {
+          "country": "Denmark",
+          "value": 0.752,
+          "trade": 0.767
+        },
+        {
+          "country": "France",
+          "value": 1.33,
+          "trade": 1.558
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.464,
+          "trade": -0.509
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.129,
+          "trade": 1.754
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -0.827,
+          "trade": 0.023
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 2.219,
+          "trade": 1.838
+        }
+      ]
+    },
+    {
+      "timestamp": 1735804800,
+      "label": "02.01. 08 h",
+      "generation": {
+        "renewables": 32.971,
+        "coal": 14.356,
+        "gas": 11.162,
+        "other": 4.415
+      },
+      "price": 127.23,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.41,
+          "trade": -2.142
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.078,
+          "trade": 0.457
+        },
+        {
+          "country": "Denmark",
+          "value": 1.034,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.344,
+          "trade": 0.925
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.453,
+          "trade": -0.477
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.438,
+          "trade": 3.47
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.212,
+          "trade": 0.106
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.175,
+          "trade": 0.493
+        }
+      ]
+    },
+    {
+      "timestamp": 1735808400,
+      "label": "02.01. 09 h",
+      "generation": {
+        "renewables": 32.767,
+        "coal": 14.691,
+        "gas": 12.237,
+        "other": 4.503
+      },
+      "price": 126.35,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.608,
+          "trade": -1.537
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.196,
+          "trade": -0.092
+        },
+        {
+          "country": "Denmark",
+          "value": 1.042,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.621,
+          "trade": 0.492
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.419,
+          "trade": -0.439
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.438,
+          "trade": 3.748
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.084,
+          "trade": 0.076
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.347,
+          "trade": -0.893
+        }
+      ]
+    },
+    {
+      "timestamp": 1735812000,
+      "label": "02.01. 10 h",
+      "generation": {
+        "renewables": 33.764,
+        "coal": 14.749,
+        "gas": 12.3,
+        "other": 3.76
+      },
+      "price": 119.97,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.887,
+          "trade": -1.544
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": 0.235,
+          "trade": 0.443
+        },
+        {
+          "country": "Denmark",
+          "value": 1.096,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.687,
+          "trade": 0.77
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.361,
+          "trade": -0.415
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.614,
+          "trade": 2.583
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.023,
+          "trade": 0.3
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.141,
+          "trade": -0.891
+        }
+      ]
+    },
+    {
+      "timestamp": 1735815600,
+      "label": "02.01. 11 h",
+      "generation": {
+        "renewables": 33.615,
+        "coal": 14.716,
+        "gas": 12.281,
+        "other": 3.406
+      },
+      "price": 115.95,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.015,
+          "trade": -2.053
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.158,
+          "trade": -0.016
+        },
+        {
+          "country": "Denmark",
+          "value": 1.084,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.096,
+          "trade": 1.36
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.353,
+          "trade": -0.4
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.658,
+          "trade": 2.392
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.189,
+          "trade": 0.3
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.16,
+          "trade": -0.876
+        }
+      ]
+    },
+    {
+      "timestamp": 1735819200,
+      "label": "02.01. 12 h",
+      "generation": {
+        "renewables": 32.46,
+        "coal": 14.568,
+        "gas": 12.161,
+        "other": 3.306
+      },
+      "price": 113.9,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.286,
+          "trade": -1.957
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.08,
+          "trade": -0.481
+        },
+        {
+          "country": "Denmark",
+          "value": 1.005,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.17,
+          "trade": 1.106
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.366,
+          "trade": -0.397
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.2,
+          "trade": 2.78
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.201,
+          "trade": 0.3
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.303,
+          "trade": -0.343
+        }
+      ]
+    },
+    {
+      "timestamp": 1735822800,
+      "label": "02.01. 13 h",
+      "generation": {
+        "renewables": 28.199,
+        "coal": 14.427,
+        "gas": 12.189,
+        "other": 3.99
+      },
+      "price": 122.21,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.346,
+          "trade": -2.827
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.145,
+          "trade": -0.393
+        },
+        {
+          "country": "Denmark",
+          "value": 1.096,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.443,
+          "trade": 1.769
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.309,
+          "trade": -0.393
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.539,
+          "trade": 3.304
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.294,
+          "trade": 0.3
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.867,
+          "trade": -0.88
+        }
+      ]
+    },
+    {
+      "timestamp": 1735826400,
+      "label": "02.01. 14 h",
+      "generation": {
+        "renewables": 24.806,
+        "coal": 14.521,
+        "gas": 12.372,
+        "other": 6.919
+      },
+      "price": 130.11,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.4,
+          "trade": -3.291
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.551,
+          "trade": -0.558
+        },
+        {
+          "country": "Denmark",
+          "value": 1.099,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 2.0,
+          "trade": 2.457
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.246,
+          "trade": -0.404
+        },
+        {
+          "country": "Netherlands",
+          "value": 4.003,
+          "trade": 3.847
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.535,
+          "trade": 0.263
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.682,
+          "trade": -0.703
+        }
+      ]
+    },
+    {
+      "timestamp": 1735830000,
+      "label": "02.01. 15 h",
+      "generation": {
+        "renewables": 24.78,
+        "coal": 14.465,
+        "gas": 12.627,
+        "other": 6.345
+      },
+      "price": 138.59,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.45,
+          "trade": -3.514
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.138,
+          "trade": -0.726
+        },
+        {
+          "country": "Denmark",
+          "value": 0.933,
+          "trade": 0.946
+        },
+        {
+          "country": "France",
+          "value": 2.179,
+          "trade": 0.748
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.263,
+          "trade": -0.43
+        },
+        {
+          "country": "Netherlands",
+          "value": 4.362,
+          "trade": 4.953
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.702,
+          "trade": 0.018
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.203,
+          "trade": 0.811
+        }
+      ]
+    },
+    {
+      "timestamp": 1735833600,
+      "label": "02.01. 16 h",
+      "generation": {
+        "renewables": 27.467,
+        "coal": 14.388,
+        "gas": 12.651,
+        "other": 9.032
+      },
+      "price": 152.87,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.999,
+          "trade": -2.464
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.464,
+          "trade": -0.755
+        },
+        {
+          "country": "Denmark",
+          "value": 0.97,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 2.412,
+          "trade": 1.497
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.339,
+          "trade": -0.472
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.767,
+          "trade": 3.182
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.574,
+          "trade": -0.379
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.789,
+          "trade": 1.677
+        }
+      ]
+    },
+    {
+      "timestamp": 1735837200,
+      "label": "02.01. 17 h",
+      "generation": {
+        "renewables": 28.29,
+        "coal": 14.517,
+        "gas": 13.169,
+        "other": 8.962
+      },
+      "price": 152.94,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.343,
+          "trade": -1.03
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.204,
+          "trade": -0.719
+        },
+        {
+          "country": "Denmark",
+          "value": 0.822,
+          "trade": 0.806
+        },
+        {
+          "country": "France",
+          "value": 1.906,
+          "trade": 2.396
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.33,
+          "trade": -0.514
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.029,
+          "trade": 2.897
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.343,
+          "trade": -0.503
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.324,
+          "trade": 0.498
+        }
+      ]
+    },
+    {
+      "timestamp": 1735840800,
+      "label": "02.01. 18 h",
+      "generation": {
+        "renewables": 30.295,
+        "coal": 14.503,
+        "gas": 13.396,
+        "other": 8.008
+      },
+      "price": 139.15,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.191,
+          "trade": -0.258
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -0.928,
+          "trade": -0.882
+        },
+        {
+          "country": "Denmark",
+          "value": 0.487,
+          "trade": 0.484
+        },
+        {
+          "country": "France",
+          "value": 1.432,
+          "trade": 2.361
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.433,
+          "trade": -0.534
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.643,
+          "trade": 1.865
+        },
+        {
+          "country": "Norway",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.259,
+          "trade": -0.632
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.541,
+          "trade": 1.048
+        }
+      ]
+    },
+    {
+      "timestamp": 1735844400,
+      "label": "02.01. 19 h",
+      "generation": {
+        "renewables": 30.916,
+        "coal": 14.375,
+        "gas": 13.168,
+        "other": 5.708
+      },
+      "price": 130.0,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.913,
+          "trade": -1.411
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.586,
+          "trade": -1.136
+        },
+        {
+          "country": "Denmark",
+          "value": 0.876,
+          "trade": 0.895
+        },
+        {
+          "country": "France",
+          "value": 0.797,
+          "trade": 0.627
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.526,
+          "trade": -0.539
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.45,
+          "trade": 3.491
+        },
+        {
+          "country": "Norway",
+          "value": 0.001,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.4,
+          "trade": -1.087
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.309,
+          "trade": -0.023
+        }
+      ]
+    },
+    {
+      "timestamp": 1735848000,
+      "label": "02.01. 20 h",
+      "generation": {
+        "renewables": 30.306,
+        "coal": 14.21,
+        "gas": 11.863,
+        "other": 3.765
+      },
+      "price": 119.78,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.892,
+          "trade": -2.707
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.424,
+          "trade": -0.726
+        },
+        {
+          "country": "Denmark",
+          "value": 0.881,
+          "trade": 0.915
+        },
+        {
+          "country": "France",
+          "value": 1.109,
+          "trade": 1.6
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.521,
+          "trade": -0.546
+        },
+        {
+          "country": "Netherlands",
+          "value": 3.151,
+          "trade": 4.306
+        },
+        {
+          "country": "Norway",
+          "value": 0.059,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.332,
+          "trade": -0.82
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.482,
+          "trade": 0.152
+        }
+      ]
+    },
+    {
+      "timestamp": 1735851600,
+      "label": "02.01. 21 h",
+      "generation": {
+        "renewables": 30.668,
+        "coal": 14.059,
+        "gas": 11.439,
+        "other": 3.739
+      },
+      "price": 113.42,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.718,
+          "trade": -2.852
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.693,
+          "trade": -0.688
+        },
+        {
+          "country": "Denmark",
+          "value": 1.131,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.265,
+          "trade": 1.334
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.468,
+          "trade": -0.553
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.804,
+          "trade": 3.825
+        },
+        {
+          "country": "Norway",
+          "value": 0.004,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.484,
+          "trade": -0.545
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 1.503,
+          "trade": 0.341
+        }
+      ]
+    },
+    {
+      "timestamp": 1735855200,
+      "label": "02.01. 22 h",
+      "generation": {
+        "renewables": 30.761,
+        "coal": 13.087,
+        "gas": 10.41,
+        "other": 3.273
+      },
+      "price": 82.47,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -0.908,
+          "trade": -4.061
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -1.774,
+          "trade": -0.039
+        },
+        {
+          "country": "Denmark",
+          "value": 1.156,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 0.799,
+          "trade": 0.0
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.549,
+          "trade": -0.538
+        },
+        {
+          "country": "Netherlands",
+          "value": 2.208,
+          "trade": 3.633
+        },
+        {
+          "country": "Norway",
+          "value": 0.014,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.442,
+          "trade": -0.389
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": 0.607,
+          "trade": -0.319
+        }
+      ]
+    },
+    {
+      "timestamp": 1735858800,
+      "label": "02.01. 23 h",
+      "generation": {
+        "renewables": 30.502,
+        "coal": 12.038,
+        "gas": 10.246,
+        "other": 3.294
+      },
+      "price": 99.56,
+      "flows": [
+        {
+          "country": "Austria",
+          "value": -1.399,
+          "trade": -4.065
+        },
+        {
+          "country": "Belgium",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Czech Republic",
+          "value": -2.009,
+          "trade": -0.505
+        },
+        {
+          "country": "Denmark",
+          "value": 1.131,
+          "trade": 1.1
+        },
+        {
+          "country": "France",
+          "value": 1.039,
+          "trade": 0.455
+        },
+        {
+          "country": "Luxembourg",
+          "value": -0.497,
+          "trade": -0.518
+        },
+        {
+          "country": "Netherlands",
+          "value": 1.842,
+          "trade": 3.238
+        },
+        {
+          "country": "Norway",
+          "value": 0.007,
+          "trade": 0.0
+        },
+        {
+          "country": "Poland",
+          "value": -1.575,
+          "trade": -0.402
+        },
+        {
+          "country": "Sweden",
+          "value": 0.0,
+          "trade": 0.0
+        },
+        {
+          "country": "Switzerland",
+          "value": -0.208,
+          "trade": -1.703
+        }
+      ]
+    }
+  ]
+}
