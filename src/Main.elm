@@ -117,7 +117,7 @@ viewDashboard state =
         , div [ class "grid-two" ]
             [ sectionCard "chord-view" "1 · Gerichtete Flüsse" "Klick auf eine Verbindung filtert die anderen Ansichten."
                 [ View.Chord.view state.selectedPartner current SelectPartner ]
-            , sectionCard "timeline-view" "2 · Erzeugungsmix im Zeitverlauf" "Klick auf eine Stunde aktualisiert Chord und Matrix."
+            , sectionCard "timeline-view" "2 · Erzeugungsmix im Zeitverlauf" "Absolute Leistung in GW; Werte und Anteile beziehen sich auf die ausgewählte Stunde."
                 [ View.TimeSeries.view samples state.selectedIndex state.selectedPartner SelectTime
                 , legend
                 ]
@@ -145,7 +145,7 @@ legend =
         , legendItem "#665c54" "Kohle"
         , legendItem "#e6a23c" "Gas"
         , legendItem "#9ca3af" "Sonstige"
-        , legendItem "#7c3aed" "gewähltes Länderpaar"
+        , legendItem "#7c3aed" "physischer Fluss (eigene GW-Skala)"
         ]
 
 
@@ -166,4 +166,3 @@ sampleAt index samples =
             , price = 0
             , flows = []
             }
-

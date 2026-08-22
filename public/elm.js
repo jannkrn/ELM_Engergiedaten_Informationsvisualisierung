@@ -6324,7 +6324,7 @@ var $author$project$Main$legend = A2(
 			A2($author$project$Main$legendItem, '#665c54', 'Kohle'),
 			A2($author$project$Main$legendItem, '#e6a23c', 'Gas'),
 			A2($author$project$Main$legendItem, '#9ca3af', 'Sonstige'),
-			A2($author$project$Main$legendItem, '#7c3aed', 'gewähltes Länderpaar')
+			A2($author$project$Main$legendItem, '#7c3aed', 'physischer Fluss (eigene GW-Skala)')
 		]));
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -7036,8 +7036,172 @@ var $author$project$View$TimeSeries$areaPath = F5(
 			' L ',
 			_Utils_ap(topPoints, bottomPoints)) + ' Z');
 	});
+var $author$project$View$TimeSeries$ceilingToHalf = function (value) {
+	return $elm$core$Basics$ceiling(value * 2) / 2;
+};
 var $elm$svg$Svg$Attributes$fillOpacity = _VirtualDom_attribute('fill-opacity');
+var $elm$core$Basics$pow = _Basics_pow;
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $author$project$View$TimeSeries$formatNumber = F2(
+	function (decimals, value) {
+		var factor = A2($elm$core$Basics$pow, 10, decimals);
+		var rounded = $elm$core$Basics$round(value * factor) / factor;
+		return A3(
+			$elm$core$String$replace,
+			'.',
+			',',
+			$elm$core$String$fromFloat(rounded));
+	});
+var $author$project$View$TimeSeries$formatSigned = function (value) {
+	return _Utils_ap(
+		(value > 0) ? '+' : '',
+		A2($author$project$View$TimeSeries$formatNumber, 1, value));
+};
 var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
+var $elm$svg$Svg$Attributes$strokeDasharray = _VirtualDom_attribute('stroke-dasharray');
+var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$View$TimeSeries$flowTicks = F6(
+	function (left, plotWidth, flowTop, flowHeight, flowMax, y) {
+		var values = _List_fromArray(
+			[flowMax, 0, -flowMax]);
+		var tick = function (value) {
+			return _List_fromArray(
+				[
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$x1(
+							$author$project$View$TimeSeries$f(left)),
+							$elm$svg$Svg$Attributes$y1(
+							$author$project$View$TimeSeries$f(
+								y(value))),
+							$elm$svg$Svg$Attributes$x2(
+							$author$project$View$TimeSeries$f(left + plotWidth)),
+							$elm$svg$Svg$Attributes$y2(
+							$author$project$View$TimeSeries$f(
+								y(value))),
+							$elm$svg$Svg$Attributes$stroke(
+							(!value) ? '#9aa5b1' : '#e4e8ed'),
+							$elm$svg$Svg$Attributes$strokeWidth('1'),
+							$elm$svg$Svg$Attributes$strokeDasharray(
+							(!value) ? '4 3' : '0')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$text_,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$x(
+							$author$project$View$TimeSeries$f(left - 10)),
+							$elm$svg$Svg$Attributes$y(
+							$author$project$View$TimeSeries$f(
+								y(value) + 4)),
+							$elm$svg$Svg$Attributes$textAnchor('end'),
+							$elm$svg$Svg$Attributes$fontSize('11'),
+							$elm$svg$Svg$Attributes$fontFamily('Arial'),
+							$elm$svg$Svg$Attributes$fill('#5b6472')
+						]),
+					_List_fromArray(
+						[
+							$elm$svg$Svg$text(
+							$author$project$View$TimeSeries$formatSigned(value))
+						]))
+				]);
+		};
+		return _Utils_ap(
+			A2($elm$core$List$concatMap, tick, values),
+			_List_fromArray(
+				[
+					A2(
+					$elm$svg$Svg$line,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$x1(
+							$author$project$View$TimeSeries$f(left)),
+							$elm$svg$Svg$Attributes$y1(
+							$author$project$View$TimeSeries$f(flowTop)),
+							$elm$svg$Svg$Attributes$x2(
+							$author$project$View$TimeSeries$f(left)),
+							$elm$svg$Svg$Attributes$y2(
+							$author$project$View$TimeSeries$f(flowTop + flowHeight)),
+							$elm$svg$Svg$Attributes$stroke('#aab2bd')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$text_,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$x('18'),
+							$elm$svg$Svg$Attributes$y(
+							$author$project$View$TimeSeries$f(flowTop + (flowHeight / 2))),
+							$elm$svg$Svg$Attributes$textAnchor('middle'),
+							$elm$svg$Svg$Attributes$fontSize('12'),
+							$elm$svg$Svg$Attributes$fontFamily('Arial'),
+							$elm$svg$Svg$Attributes$fontWeight('700'),
+							$elm$svg$Svg$Attributes$fill('#4c5665'),
+							$elm$svg$Svg$Attributes$transform(
+							'rotate(-90 18 ' + ($author$project$View$TimeSeries$f(flowTop + (flowHeight / 2)) + ')'))
+						]),
+					_List_fromArray(
+						[
+							$elm$svg$Svg$text('Stromfluss (GW)')
+						]))
+				]));
+	});
+var $author$project$View$TimeSeries$generationTick = F4(
+	function (left, plotWidth, y, value) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$author$project$View$TimeSeries$f(left)),
+						$elm$svg$Svg$Attributes$y1(
+						$author$project$View$TimeSeries$f(
+							y(value))),
+						$elm$svg$Svg$Attributes$x2(
+						$author$project$View$TimeSeries$f(left + plotWidth)),
+						$elm$svg$Svg$Attributes$y2(
+						$author$project$View$TimeSeries$f(
+							y(value))),
+						$elm$svg$Svg$Attributes$stroke('#dce2e8'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$text_,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x(
+						$author$project$View$TimeSeries$f(left - 10)),
+						$elm$svg$Svg$Attributes$y(
+						$author$project$View$TimeSeries$f(
+							y(value) + 4)),
+						$elm$svg$Svg$Attributes$textAnchor('end'),
+						$elm$svg$Svg$Attributes$fontSize('11'),
+						$elm$svg$Svg$Attributes$fontFamily('Arial'),
+						$elm$svg$Svg$Attributes$fill('#5b6472')
+					]),
+				_List_fromArray(
+					[
+						$elm$svg$Svg$text(
+						A2($author$project$View$TimeSeries$formatNumber, 0, value))
+					]))
+			]);
+	});
 var $author$project$View$TimeSeries$linePath = F3(
 	function (x, y, samples) {
 		return 'M ' + A2(
@@ -7054,23 +7218,148 @@ var $author$project$View$TimeSeries$linePath = F3(
 					}),
 				samples));
 	});
-var $elm$svg$Svg$Attributes$strokeDasharray = _VirtualDom_attribute('stroke-dasharray');
-var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
-var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
-var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
-var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$View$TimeSeries$niceGenerationStep = function (maximum) {
+	return (maximum <= 20) ? 5 : ((maximum <= 40) ? 10 : ((maximum <= 80) ? 20 : ((maximum <= 120) ? 25 : 50)));
+};
+var $author$project$View$TimeSeries$sampleAt = F2(
+	function (index, samples) {
+		return A2(
+			$elm$core$Maybe$withDefault,
+			{
+				flows: _List_Nil,
+				generation: {coal: 0, gas: 0, other: 0, renewables: 0},
+				label: '–',
+				price: 0,
+				timestamp: 0
+			},
+			$elm$core$List$head(
+				A2($elm$core$List$drop, index, samples)));
+	});
+var $author$project$View$TimeSeries$detailItem = F2(
+	function (label, value) {
+		return A2(
+			$elm$html$Html$span,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('timeseries-detail')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('timeseries-detail-label')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(label)
+						])),
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('timeseries-detail-value')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(value)
+						]))
+				]));
+	});
+var $author$project$View$TimeSeries$formatPercent = F2(
+	function (value, total) {
+		return (total <= 0) ? '0 %' : (A2($author$project$View$TimeSeries$formatNumber, 0, (value * 100) / total) + ' %');
+	});
+var $author$project$View$TimeSeries$selectedDetails = F2(
+	function (sample, selectedPartner) {
+		var generation = sample.generation;
+		var total = ((generation.renewables + generation.coal) + generation.gas) + generation.other;
+		var generationItem = F2(
+			function (label, value) {
+				return A2(
+					$author$project$View$TimeSeries$detailItem,
+					label,
+					A2($author$project$View$TimeSeries$formatNumber, 1, value) + (' GW · ' + A2($author$project$View$TimeSeries$formatPercent, value, total)));
+			});
+		var flowItem = function () {
+			if (selectedPartner.$ === 'Nothing') {
+				return _List_Nil;
+			} else {
+				var country = selectedPartner.a;
+				return _List_fromArray(
+					[
+						A2(
+						$author$project$View$TimeSeries$detailItem,
+						'Fluss ' + country,
+						$author$project$View$TimeSeries$formatSigned(
+							A2($author$project$Domain$flowFor, country, sample)) + ' GW')
+					]);
+			}
+		}();
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('timeseries-details'),
+					A2($elm$html$Html$Attributes$attribute, 'aria-live', 'polite')
+				]),
+			A2(
+				$elm$core$List$cons,
+				A2($author$project$View$TimeSeries$detailItem, 'Ausgewählte Stunde', sample.label),
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$author$project$View$TimeSeries$detailItem,
+						'Gesamt',
+						A2($author$project$View$TimeSeries$formatNumber, 1, total) + ' GW'),
+					A2(
+						$elm$core$List$cons,
+						A2(generationItem, 'Erneuerbare', generation.renewables),
+						A2(
+							$elm$core$List$cons,
+							A2(generationItem, 'Kohle', generation.coal),
+							A2(
+								$elm$core$List$cons,
+								A2(generationItem, 'Gas', generation.gas),
+								A2(
+									$elm$core$List$cons,
+									A2(generationItem, 'Sonstige', generation.other),
+									A2(
+										$elm$core$List$cons,
+										A2(
+											$author$project$View$TimeSeries$detailItem,
+											'Strompreis',
+											A2($author$project$View$TimeSeries$formatNumber, 1, sample.price) + ' €/MWh'),
+										flowItem))))))));
+	});
+var $author$project$View$TimeSeries$tooltipText = F2(
+	function (selectedPartner, sample) {
+		var generation = sample.generation;
+		var total = ((generation.renewables + generation.coal) + generation.gas) + generation.other;
+		var flowLine = function () {
+			if (selectedPartner.$ === 'Nothing') {
+				return '';
+			} else {
+				var country = selectedPartner.a;
+				return '\nFluss ' + (country + (': ' + ($author$project$View$TimeSeries$formatSigned(
+					A2($author$project$Domain$flowFor, country, sample)) + ' GW')));
+			}
+		}();
+		return sample.label + ('\nGesamt: ' + (A2($author$project$View$TimeSeries$formatNumber, 1, total) + (' GW' + ('\nErneuerbare: ' + (A2($author$project$View$TimeSeries$formatNumber, 1, generation.renewables) + (' GW (' + (A2($author$project$View$TimeSeries$formatPercent, generation.renewables, total) + (')' + ('\nKohle: ' + (A2($author$project$View$TimeSeries$formatNumber, 1, generation.coal) + (' GW (' + (A2($author$project$View$TimeSeries$formatPercent, generation.coal, total) + (')' + ('\nGas: ' + (A2($author$project$View$TimeSeries$formatNumber, 1, generation.gas) + (' GW (' + (A2($author$project$View$TimeSeries$formatPercent, generation.gas, total) + (')' + ('\nSonstige: ' + (A2($author$project$View$TimeSeries$formatNumber, 1, generation.other) + (' GW (' + (A2($author$project$View$TimeSeries$formatPercent, generation.other, total) + (')' + flowLine)))))))))))))))))))))));
+	});
 var $author$project$View$TimeSeries$view = F4(
 	function (samples, selectedIndex, selectedPartner, onSelect) {
 		var width = 900;
 		var total = function (sample) {
 			return ((sample.generation.renewables + sample.generation.coal) + sample.generation.gas) + sample.generation.other;
 		};
-		var top = 30;
+		var top = 24;
+		var selectedSample = A2($author$project$View$TimeSeries$sampleAt, selectedIndex, samples);
 		var renewTop = function (sample) {
 			return sample.generation.renewables;
 		};
-		var plotWidth = 810;
-		var plotHeight = 250;
+		var plotWidth = 790;
 		var maxPower = A2(
 			$elm$core$Basics$max,
 			1,
@@ -7079,11 +7368,57 @@ var $author$project$View$TimeSeries$view = F4(
 				1,
 				$elm$core$List$maximum(
 					A2($elm$core$List$map, total, samples))));
-		var y = function (value) {
-			return (top + plotHeight) - ((value * plotHeight) / maxPower);
+		var left = 78;
+		var height = 500;
+		var generationStep = $author$project$View$TimeSeries$niceGenerationStep(maxPower);
+		var generationMax = $elm$core$Basics$ceiling(maxPower / generationStep) * generationStep;
+		var generationTicks = A2(
+			$elm$core$List$map,
+			function (index) {
+				return index * generationStep;
+			},
+			A2(
+				$elm$core$List$range,
+				0,
+				$elm$core$Basics$round(generationMax / generationStep)));
+		var generationHeight = 235;
+		var generationBottom = top + generationHeight;
+		var yGeneration = function (value) {
+			return generationBottom - ((value * generationHeight) / generationMax);
 		};
-		var left = 54;
-		var height = 350;
+		var generationAxis = A2(
+			$elm$core$List$concatMap,
+			A3($author$project$View$TimeSeries$generationTick, left, plotWidth, yGeneration),
+			generationTicks);
+		var flowTop = 326;
+		var flowMax = function () {
+			if (selectedPartner.$ === 'Nothing') {
+				return 1;
+			} else {
+				var country = selectedPartner.a;
+				return $author$project$View$TimeSeries$ceilingToHalf(
+					A2(
+						$elm$core$Basics$max,
+						0.1,
+						A2(
+							$elm$core$Maybe$withDefault,
+							1,
+							$elm$core$List$maximum(
+								A2(
+									$elm$core$List$map,
+									A2(
+										$elm$core$Basics$composeR,
+										$author$project$Domain$flowFor(country),
+										$elm$core$Basics$abs),
+									samples)))));
+			}
+		}();
+		var flowHeight = 105;
+		var yFlow = function (value) {
+			return (flowTop + (flowHeight / 2)) - ((value * (flowHeight * 0.45)) / flowMax);
+		};
+		var flowBottom = flowTop + flowHeight;
+		var flowAxis = A6($author$project$View$TimeSeries$flowTicks, left, plotWidth, flowTop, flowHeight, flowMax, yFlow);
 		var count = A2(
 			$elm$core$Basics$max,
 			1,
@@ -7094,24 +7429,38 @@ var $author$project$View$TimeSeries$view = F4(
 		var hit = F2(
 			function (index, sample) {
 				return A2(
-					$elm$svg$Svg$rect,
+					$elm$svg$Svg$g,
+					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$x(
-							$author$project$View$TimeSeries$f(
-								x(index) - ((plotWidth / count) / 2))),
-							$elm$svg$Svg$Attributes$y(
-							$author$project$View$TimeSeries$f(top)),
-							$elm$svg$Svg$Attributes$width(
-							$author$project$View$TimeSeries$f((plotWidth / count) + 1)),
-							$elm$svg$Svg$Attributes$height(
-							$author$project$View$TimeSeries$f(plotHeight)),
-							$elm$svg$Svg$Attributes$fill('transparent'),
-							$elm$svg$Svg$Attributes$cursor('pointer'),
-							$elm$svg$Svg$Events$onClick(
-							onSelect(index))
-						]),
-					_List_Nil);
+							A2(
+							$elm$svg$Svg$title,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$svg$Svg$text(
+									A2($author$project$View$TimeSeries$tooltipText, selectedPartner, sample))
+								])),
+							A2(
+							$elm$svg$Svg$rect,
+							_List_fromArray(
+								[
+									$elm$svg$Svg$Attributes$x(
+									$author$project$View$TimeSeries$f(
+										x(index) - ((plotWidth / count) / 2))),
+									$elm$svg$Svg$Attributes$y(
+									$author$project$View$TimeSeries$f(top)),
+									$elm$svg$Svg$Attributes$width(
+									$author$project$View$TimeSeries$f((plotWidth / count) + 1)),
+									$elm$svg$Svg$Attributes$height(
+									$author$project$View$TimeSeries$f(flowBottom - top)),
+									$elm$svg$Svg$Attributes$fill('transparent'),
+									$elm$svg$Svg$Attributes$cursor('pointer'),
+									$elm$svg$Svg$Events$onClick(
+									onSelect(index))
+								]),
+							_List_Nil)
+						]));
 			});
 		var labelAt = F2(
 			function (index, sample) {
@@ -7123,7 +7472,7 @@ var $author$project$View$TimeSeries$view = F4(
 							$author$project$View$TimeSeries$f(
 								x(index))),
 							$elm$svg$Svg$Attributes$y(
-							$author$project$View$TimeSeries$f((top + plotHeight) + 23)),
+							$author$project$View$TimeSeries$f(flowBottom + 25)),
 							$elm$svg$Svg$Attributes$textAnchor('middle'),
 							$elm$svg$Svg$Attributes$fontSize('10'),
 							$elm$svg$Svg$Attributes$fontFamily('Arial'),
@@ -7134,28 +7483,32 @@ var $author$project$View$TimeSeries$view = F4(
 							$elm$svg$Svg$text(sample.label)
 						])) : A2($elm$svg$Svg$g, _List_Nil, _List_Nil);
 			});
-		var partnerPoints = function () {
+		var selectedX = x(selectedIndex);
+		var partnerLine = function () {
 			if (selectedPartner.$ === 'Nothing') {
-				return _List_Nil;
+				return _List_fromArray(
+					[
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x(
+								$author$project$View$TimeSeries$f(left + (plotWidth / 2))),
+								$elm$svg$Svg$Attributes$y(
+								$author$project$View$TimeSeries$f((flowTop + (flowHeight / 2)) + 4)),
+								$elm$svg$Svg$Attributes$textAnchor('middle'),
+								$elm$svg$Svg$Attributes$fontSize('12'),
+								$elm$svg$Svg$Attributes$fontFamily('Arial'),
+								$elm$svg$Svg$Attributes$fill('#697482')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Partnerland in der Flussansicht oder Matrix auswählen')
+							]))
+					]);
 			} else {
 				var country = selectedPartner.a;
-				var maxAbs = A2(
-					$elm$core$Basics$max,
-					1,
-					A2(
-						$elm$core$Maybe$withDefault,
-						1,
-						$elm$core$List$maximum(
-							A2(
-								$elm$core$List$map,
-								A2(
-									$elm$core$Basics$composeR,
-									$author$project$Domain$flowFor(country),
-									$elm$core$Basics$abs),
-								samples))));
-				var flowY = function (sample) {
-					return (top + (plotHeight / 2)) - ((A2($author$project$Domain$flowFor, country, sample) * (plotHeight * 0.38)) / maxAbs);
-				};
+				var selectedValue = A2($author$project$Domain$flowFor, country, selectedSample);
 				return _List_fromArray(
 					[
 						A2(
@@ -7163,24 +7516,59 @@ var $author$project$View$TimeSeries$view = F4(
 						_List_fromArray(
 							[
 								$elm$svg$Svg$Attributes$d(
-								A3($author$project$View$TimeSeries$linePath, x, flowY, samples)),
+								A3(
+									$author$project$View$TimeSeries$linePath,
+									x,
+									A2(
+										$elm$core$Basics$composeR,
+										$author$project$Domain$flowFor(country),
+										yFlow),
+									samples)),
 								$elm$svg$Svg$Attributes$fill('none'),
 								$elm$svg$Svg$Attributes$stroke('#7c3aed'),
 								$elm$svg$Svg$Attributes$strokeWidth('3')
 							]),
-						_List_Nil)
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$circle,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$cx(
+								$author$project$View$TimeSeries$f(selectedX)),
+								$elm$svg$Svg$Attributes$cy(
+								$author$project$View$TimeSeries$f(
+									yFlow(selectedValue))),
+								$elm$svg$Svg$Attributes$r('5'),
+								$elm$svg$Svg$Attributes$fill('#7c3aed'),
+								$elm$svg$Svg$Attributes$stroke('white'),
+								$elm$svg$Svg$Attributes$strokeWidth('2')
+							]),
+						_List_Nil),
+						A2(
+						$elm$svg$Svg$text_,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$x(
+								$author$project$View$TimeSeries$f(left)),
+								$elm$svg$Svg$Attributes$y(
+								$author$project$View$TimeSeries$f(flowTop - 12)),
+								$elm$svg$Svg$Attributes$fontSize('12'),
+								$elm$svg$Svg$Attributes$fontFamily('Arial'),
+								$elm$svg$Svg$Attributes$fontWeight('700'),
+								$elm$svg$Svg$Attributes$fill('#4c5665')
+							]),
+						_List_fromArray(
+							[
+								$elm$svg$Svg$text('Physischer Stromfluss Deutschland ↔ ' + country)
+							]))
 					]);
 			}
 		}();
-		var selectedX = x(selectedIndex);
 		var coalTop = function (sample) {
 			return renewTop(sample) + sample.generation.coal;
 		};
 		var gasTop = function (sample) {
 			return coalTop(sample) + sample.generation.gas;
-		};
-		var bottoms = function (accessor) {
-			return A2($elm$core$List$map, accessor, samples);
 		};
 		var area = F3(
 			function (upper, lower, color) {
@@ -7189,7 +7577,7 @@ var $author$project$View$TimeSeries$view = F4(
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$d(
-							A5($author$project$View$TimeSeries$areaPath, x, y, samples, upper, lower)),
+							A5($author$project$View$TimeSeries$areaPath, x, yGeneration, samples, upper, lower)),
 							$elm$svg$Svg$Attributes$fill(color),
 							$elm$svg$Svg$Attributes$fillOpacity('0.92')
 						]),
@@ -7199,68 +7587,104 @@ var $author$project$View$TimeSeries$view = F4(
 			return gasTop(sample) + sample.generation.other;
 		};
 		return A2(
-			$elm$svg$Svg$svg,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$svg$Svg$Attributes$viewBox(
-					'0 0 ' + ($elm$core$String$fromInt(width) + (' ' + $elm$core$String$fromInt(height)))),
-					$elm$svg$Svg$Attributes$width('100%'),
-					A2($elm$html$Html$Attributes$attribute, 'role', 'img'),
-					A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Gestapelte Zeitreihe des Erzeugungsmix')
+					$elm$html$Html$Attributes$class('timeseries-block')
 				]),
-			_Utils_ap(
-				_List_fromArray(
-					[
-						A2(
-						$elm$svg$Svg$line,
-						_List_fromArray(
-							[
-								$elm$svg$Svg$Attributes$x1(
-								$author$project$View$TimeSeries$f(left)),
-								$elm$svg$Svg$Attributes$y1(
-								$author$project$View$TimeSeries$f(top + plotHeight)),
-								$elm$svg$Svg$Attributes$x2(
-								$author$project$View$TimeSeries$f(left + plotWidth)),
-								$elm$svg$Svg$Attributes$y2(
-								$author$project$View$TimeSeries$f(top + plotHeight)),
-								$elm$svg$Svg$Attributes$stroke('#aab2bd')
-							]),
-						_List_Nil),
-						A3(
-						area,
-						renewTop,
-						$elm$core$Basics$always(0),
-						'#63a35c'),
-						A3(area, coalTop, renewTop, '#665c54'),
-						A3(area, gasTop, coalTop, '#e6a23c'),
-						A3(area, allTop, gasTop, '#9ca3af')
-					]),
-				_Utils_ap(
-					partnerPoints,
+			_List_fromArray(
+				[
+					A2(
+					$elm$svg$Svg$svg,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$viewBox(
+							'0 0 ' + ($elm$core$String$fromInt(width) + (' ' + $elm$core$String$fromInt(height)))),
+							$elm$svg$Svg$Attributes$width('100%'),
+							A2($elm$html$Html$Attributes$attribute, 'role', 'img'),
+							A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Gestapelte Zeitreihe der absoluten Erzeugungsleistung mit separater Stromflussskala')
+						]),
 					_Utils_ap(
-						_List_fromArray(
-							[
-								A2(
-								$elm$svg$Svg$line,
-								_List_fromArray(
-									[
-										$elm$svg$Svg$Attributes$x1(
-										$author$project$View$TimeSeries$f(selectedX)),
-										$elm$svg$Svg$Attributes$y1(
-										$author$project$View$TimeSeries$f(top)),
-										$elm$svg$Svg$Attributes$x2(
-										$author$project$View$TimeSeries$f(selectedX)),
-										$elm$svg$Svg$Attributes$y2(
-										$author$project$View$TimeSeries$f(top + plotHeight)),
-										$elm$svg$Svg$Attributes$stroke('#1f2937'),
-										$elm$svg$Svg$Attributes$strokeWidth('2'),
-										$elm$svg$Svg$Attributes$strokeDasharray('5 4')
-									]),
-								_List_Nil)
-							]),
+						generationAxis,
 						_Utils_ap(
-							A2($elm$core$List$indexedMap, hit, samples),
-							A2($elm$core$List$indexedMap, labelAt, samples))))));
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$text_,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('18'),
+											$elm$svg$Svg$Attributes$y(
+											$author$project$View$TimeSeries$f(top + (generationHeight / 2))),
+											$elm$svg$Svg$Attributes$textAnchor('middle'),
+											$elm$svg$Svg$Attributes$fontSize('12'),
+											$elm$svg$Svg$Attributes$fontFamily('Arial'),
+											$elm$svg$Svg$Attributes$fontWeight('700'),
+											$elm$svg$Svg$Attributes$fill('#4c5665'),
+											$elm$svg$Svg$Attributes$transform(
+											'rotate(-90 18 ' + ($author$project$View$TimeSeries$f(top + (generationHeight / 2)) + ')'))
+										]),
+									_List_fromArray(
+										[
+											$elm$svg$Svg$text('Erzeugungsleistung (GW)')
+										])),
+									A3(
+									area,
+									renewTop,
+									$elm$core$Basics$always(0),
+									'#63a35c'),
+									A3(area, coalTop, renewTop, '#665c54'),
+									A3(area, gasTop, coalTop, '#e6a23c'),
+									A3(area, allTop, gasTop, '#9ca3af')
+								]),
+							_Utils_ap(
+								flowAxis,
+								_Utils_ap(
+									partnerLine,
+									_Utils_ap(
+										_List_fromArray(
+											[
+												A2(
+												$elm$svg$Svg$line,
+												_List_fromArray(
+													[
+														$elm$svg$Svg$Attributes$x1(
+														$author$project$View$TimeSeries$f(selectedX)),
+														$elm$svg$Svg$Attributes$y1(
+														$author$project$View$TimeSeries$f(top)),
+														$elm$svg$Svg$Attributes$x2(
+														$author$project$View$TimeSeries$f(selectedX)),
+														$elm$svg$Svg$Attributes$y2(
+														$author$project$View$TimeSeries$f(flowBottom)),
+														$elm$svg$Svg$Attributes$stroke('#1f2937'),
+														$elm$svg$Svg$Attributes$strokeWidth('2'),
+														$elm$svg$Svg$Attributes$strokeDasharray('5 4')
+													]),
+												_List_Nil),
+												A2(
+												$elm$svg$Svg$text_,
+												_List_fromArray(
+													[
+														$elm$svg$Svg$Attributes$x(
+														$author$project$View$TimeSeries$f(left + (plotWidth / 2))),
+														$elm$svg$Svg$Attributes$y(
+														$author$project$View$TimeSeries$f(height - 8)),
+														$elm$svg$Svg$Attributes$textAnchor('middle'),
+														$elm$svg$Svg$Attributes$fontSize('12'),
+														$elm$svg$Svg$Attributes$fontFamily('Arial'),
+														$elm$svg$Svg$Attributes$fontWeight('700'),
+														$elm$svg$Svg$Attributes$fill('#4c5665')
+													]),
+												_List_fromArray(
+													[
+														$elm$svg$Svg$text('Zeitpunkt (UTC)')
+													]))
+											]),
+										_Utils_ap(
+											A2($elm$core$List$indexedMap, hit, samples),
+											A2($elm$core$List$indexedMap, labelAt, samples)))))))),
+					A2($author$project$View$TimeSeries$selectedDetails, selectedSample, selectedPartner)
+				]));
 	});
 var $author$project$Main$viewDashboard = function (state) {
 	var selectionLabel = A2($elm$core$Maybe$withDefault, 'alle Partnerländer', state.selectedPartner);
@@ -7407,7 +7831,7 @@ var $author$project$Main$viewDashboard = function (state) {
 						$author$project$Main$sectionCard,
 						'timeline-view',
 						'2 · Erzeugungsmix im Zeitverlauf',
-						'Klick auf eine Stunde aktualisiert Chord und Matrix.',
+						'Absolute Leistung in GW; Werte und Anteile beziehen sich auf die ausgewählte Stunde.',
 						_List_fromArray(
 							[
 								A4($author$project$View$TimeSeries$view, samples, state.selectedIndex, state.selectedPartner, $author$project$Main$SelectTime),

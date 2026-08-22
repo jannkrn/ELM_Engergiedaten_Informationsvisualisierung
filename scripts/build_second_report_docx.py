@@ -410,8 +410,9 @@ def build() -> None:
     add_figure(doc, "elm_chord.png", 11.0, "Abbildung 1: Gerichtete Flussansicht, von Elm als SVG gerendert. Frankreich ist ausgewählt; übrige Verbindungen werden abgeblendet.", "Elm-SVG der gerichteten Stromflüsse zwischen Deutschland und Partnerländern")
     add_text(doc, "Deutschland und die Partnerländer werden radial angeordnet. Die gerichteten Verbindungen zeigen die physischen Flüsse des ausgewählten Zeitpunkts. Die Ansicht ist ein fokussierter Chord-/Flussprototyp; für eine vollständige europäische Chord-Matrix sind weitere freigegebene Länder-zu-Länder-Daten erforderlich.")
     add_heading(doc, "3.3.2 Visualisierung Zwei - gestapelte Zeitreihe", 3)
-    add_figure(doc, "elm_timeline.png", 15.2, "Abbildung 2: Gestapelte Erzeugungszeitreihe aus Elm. Die violette Linie zeigt das ausgewählte Länderpaar, die gestrichelte Linie den gewählten Zeitpunkt.", "Elm-SVG der gestapelten Erzeugungszeitreihe")
-    add_text(doc, "Die Flächen zeigen Erneuerbare, Kohle, Gas und Sonstige. Für das ausgewählte Partnerland wird eine zusätzliche Flusslinie eingeblendet. Die Linie dient der zeitlichen Formanalyse; wegen der anderen Skala ist sie nicht als Bestandteil des Erzeugungsstapels zu lesen.")
+    add_figure(doc, "elm_timeline.png", 15.2, "Abbildung 2: Überarbeitete Erzeugungszeitreihe aus Elm. Die obere Y-Achse zeigt die absolute Erzeugungsleistung in GW. Der physische Fluss zu Frankreich wird darunter mit eigener symmetrischer GW-Achse dargestellt; die gestrichelte Linie markiert den gewählten Zeitpunkt.", "Elm-SVG der absoluten Erzeugungsleistung mit separatem Stromflussdiagramm")
+    add_text(doc, "Die gestapelten Flächen zeigen absolute Leistungen für Erneuerbare, Kohle, Gas und Sonstige. Teilstriche und Achsenbeschriftung machen die Größenordnung in GW ablesbar. Unterhalb des Erzeugungsmixes besitzt der physische Stromfluss des ausgewählten Partnerlands ein separates Diagramm mit eigener symmetrischer Skala um null. Dadurch werden Stromfluss und Erzeugungsleistung nicht fälschlich auf derselben Y-Skala verglichen.")
+    add_text(doc, "Für die ausgewählte Stunde zeigt die Anwendung Gesamtleistung, absolute Werte und prozentuale Anteile der vier Erzeugungsgruppen. Zusätzlich werden Strompreis und physischer Fluss des gewählten Partnerlands numerisch ausgegeben. Damit unterstützt die Ansicht sowohl die Mustererkennung im Verlauf als auch das Ablesen konkreter Einzelwerte.")
     add_heading(doc, "3.3.3 Visualisierung Drei - Pixelmatrix", 3)
     add_figure(doc, "elm_matrix.png", 16.0, "Abbildung 3: Pixelmatrix aus Elm. Zeilen sind Partnerländer, Spalten Stunden; Rot bedeutet Import, Blau Export.", "Elm-SVG einer Pixelmatrix der Stromflüsse nach Partnerland und Stunde")
     add_text(doc, "Die Matrix zeigt stabil gerichtete und wechselnde Beziehungen kompakt. Die schwarz umrandete Zelle markiert die gemeinsame Auswahl. Für längere Zeiträume sind Zoom, Aggregation und eine explizite Codierung fehlender Werte vorgesehen.")
@@ -452,7 +453,7 @@ def build() -> None:
     add_heading(doc, "5.1 Anwendung Visualisierung Eins", 2)
     add_text(doc, "Im Browser wurde Frankreich in der gerichteten Flussansicht ausgewählt. Die Toolbar wechselte zu „Auswahl: France“, die übrigen Verbindungen wurden abgeblendet und in der Zeitreihe erschien die violette Linie des Länderpaars. Damit wirkt die Selektion über die Grenzen der ersten View hinaus.")
     add_heading(doc, "5.2 Anwendung Visualisierung Zwei", 2)
-    add_text(doc, "Anschließend wurde die 24. Stunde der Zeitreihe gewählt. Der gemeinsame Zeitpunkt wechselte auf 02.01. 00 h, während France als Partnerauswahl erhalten blieb. Die gestrichelte Markierung, die Chord-Werte und die Matrixauswahl wurden aus demselben selectedIndex abgeleitet.")
+    add_text(doc, "Anschließend wurde in der Zeitreihe der Zeitpunkt 02.01. 00 h angeklickt. Dieser Zeitpunkt besitzt im nullbasierten Datensatz den selectedIndex 24. France blieb als Partnerauswahl erhalten. Die gestrichelte Markierung, die Chord-Werte und die Matrixauswahl wurden aus demselben Index abgeleitet. Die Detailanzeige wies für diesen Zeitpunkt 60,2 GW Gesamtleistung sowie die absoluten und prozentualen Beiträge der Erzeugungsgruppen aus; der Frankreich-Fluss betrug +0,2 GW.")
     add_heading(doc, "5.3 Anwendung Visualisierung Drei", 2)
     add_text(doc, "Ein Klick auf eine Zelle der Pixelmatrix setzte Partnerland und Stunde gemeinsam. Im Test zeigte die Toolbar anschließend „Denmark · 01.01. 12 h“. Die Matrix erfüllt damit ihre Rolle als Überblick und direkter Einstieg in einen Detailzustand.")
     add_table(
@@ -462,7 +463,7 @@ def build() -> None:
             ["Elm-Build", "erfolgreich; sechs Module kompiliert"],
             ["HTTP-Laden", "48 Stunden aus public/data/energy.json"],
             ["Chord-Auswahl", "Partnerfilter in allen Ansichten sichtbar"],
-            ["Zeitwahl", "gemeinsamer selectedIndex aktualisiert"],
+            ["Zeitwahl", "selectedIndex, GW-Detailwerte und Anteilsausgabe aktualisiert"],
             ["Matrixzelle", "Partner und Zeitpunkt gemeinsam aktualisiert"],
             ["PostgreSQL", "vier Energy-Charts-Views erfolgreich exportiert"],
         ],

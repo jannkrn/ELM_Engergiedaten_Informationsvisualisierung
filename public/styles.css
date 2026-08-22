@@ -61,6 +61,33 @@ h1 { margin: 8px 0 4px; font-size: clamp(28px, 3vw, 43px); line-height: 1.08; }
 .legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 4px 14px 0; color: #4c5665; font-size: 12px; }
 .legend > span { display: inline-flex; gap: 6px; align-items: center; }
 .swatch { display: inline-block; width: 15px; height: 9px; border-radius: 2px; }
+.timeseries-block { width: 100%; }
+.timeseries-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 8px;
+  padding: 2px 14px 10px;
+}
+.timeseries-detail {
+  min-width: 0;
+  padding: 8px 9px;
+  background: #f4f7fa;
+  border-left: 3px solid #d6dee7;
+}
+.timeseries-detail-label {
+  display: block;
+  color: #697482;
+  font-size: 10px;
+  line-height: 1.25;
+}
+.timeseries-detail-value {
+  display: block;
+  margin-top: 3px;
+  color: #21344d;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
 .footnote { color: #5b6472; font-size: 12px; line-height: 1.5; }
 .state-message { margin: 100px auto; width: 480px; padding: 30px; background: white; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
 .state-message.error { border-left: 6px solid #c44545; }

@@ -60,9 +60,17 @@ und aktiviert denselben Filter in Zeitreihe und Matrix.
 ### Gestapelte Zeitreihe
 
 `View/TimeSeries.elm` erzeugt vier gestapelte SVG-Flächen für Erneuerbare,
-Kohle, Gas und Sonstige. Für das ausgewählte Länderpaar wird zusätzlich eine
-violette Flusslinie dargestellt. Eine gestrichelte Vertikale markiert den
-gewählten Zeitpunkt. Unsichtbare Trefferflächen machen jede Stunde anklickbar.
+Kohle, Gas und Sonstige. Die linke Y-Achse zeigt die absolute Erzeugungsleistung
+in GW. Unterhalb des Erzeugungsmixes liegt ein eigenes Liniendiagramm für den
+physischen Stromfluss des ausgewählten Länderpaars. Es besitzt eine getrennte,
+symmetrische GW-Achse um die Nulllinie, damit Fluss- und Erzeugungswerte nicht
+über eine gemeinsame Skala fehlinterpretiert werden.
+
+Für die ausgewählte Stunde werden Gesamtleistung, absolute Werte, prozentuale
+Anteile, Strompreis und – falls ein Partnerland ausgewählt ist – der physische
+Stromfluss angezeigt. Dieselben Angaben sind als Tooltip über den stündlichen
+Trefferflächen verfügbar. Eine gestrichelte Vertikale markiert den gewählten
+Zeitpunkt. Unsichtbare Trefferflächen machen jede Stunde anklickbar.
 
 ### Pixelmatrix
 

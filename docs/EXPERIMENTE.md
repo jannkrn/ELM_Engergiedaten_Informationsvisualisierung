@@ -26,10 +26,19 @@ ist im Kopf der Anwendung sichtbar.
 Die folgenden Zustandsübergänge wurden im laufenden Browser geprüft:
 
 1. Klick auf `France` in der Flussansicht → Toolbar zeigt `Auswahl: France`.
-2. Klick auf Stunde 24 der Zeitreihe → Zeitpunkt wechselt auf `02.01. 00 h`,
-   die Partnerauswahl bleibt erhalten.
+2. Klick auf den Zeitpunkt `02.01. 00 h` der Zeitreihe → der nullbasierte
+   `selectedIndex` wechselt auf `24`, die Partnerauswahl bleibt erhalten. Die
+   Detailanzeige zeigt `60,2 GW` Gesamtleistung, absolute und prozentuale
+   Beiträge der Erzeugungsgruppen sowie für France einen Fluss von `+0,2 GW`.
 3. Klick auf eine Matrixzelle → Partner und Zeitpunkt werden gemeinsam gesetzt.
    Im Test entstand `Auswahl: Denmark · 01.01. 12 h`.
+
+Die Zeitreihe wurde zusätzlich auf quantitative Ablesbarkeit geprüft. Ihre
+linke Y-Achse reicht für den Testdatensatz von 0 bis 80 GW. Der physische Fluss
+des gewählten Länderpaars wird in einem getrennten Diagramm mit symmetrischer
+Skala dargestellt; für France beträgt sie -3 bis +3 GW. Dadurch sind absolute
+Erzeugungswerte und Länderflüsse ablesbar, ohne beide Größen auf derselben Skala
+zu vermischen.
 
 Damit ist nicht nur jede Ansicht einzeln vorhanden; die Interaktion läuft über
 das gemeinsame Elm-Model.

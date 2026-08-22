@@ -8,6 +8,11 @@ Auswahlzustand verbunden:
 2. gestapelte Zeitreihe,
 3. Pixelmatrix.
 
+Die Zeitreihe zeigt absolute Erzeugungsleistungen auf einer beschrifteten
+GW-Achse. Für die ausgewählte Stunde werden zusätzlich Einzelwerte und Anteile
+angegeben. Der physische Fluss zum gewählten Partnerland liegt in einem eigenen
+Diagramm mit separater symmetrischer GW-Skala.
+
 ## Projektstruktur
 
 ```text
