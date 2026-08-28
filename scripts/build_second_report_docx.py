@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 import json
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_LINE_SPACING
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.shared import Cm, Inches, Pt, RGBColor
 
 
@@ -129,9 +131,31 @@ def add_text(doc, text: str, style=None, bold_prefix: str | None = None):
 
 def add_bullet(doc, text: str):
     p = doc.add_paragraph(style="List Bullet")
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(3)
+    p.paragraph_format.line_spacing = 1.0
+    p.paragraph_format.keep_with_next = False
+    p.paragraph_format.keep_together = True
     run = p.add_run(text)
     set_font(run)
     return p
+
+
+def add_hyperlink(paragraph, text: str, url: str) -> None:
+    relation_id = paragraph.part.relate_to(url, RT.HYPERLINK, is_external=True)
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), relation_id)
+    run = OxmlElement("w:r")
+    run_properties = OxmlElement("w:rPr")
+    run_style = OxmlElement("w:rStyle")
+    run_style.set(qn("w:val"), "Hyperlink")
+    run_properties.append(run_style)
+    run.append(run_properties)
+    text_node = OxmlElement("w:t")
+    text_node.text = text
+    run.append(text_node)
+    hyperlink.append(run)
+    paragraph._p.append(hyperlink)
 
 
 def add_number(doc, text: str):
@@ -263,7 +287,9 @@ def configure_styles(doc: Document) -> None:
         style.paragraph_format.left_indent = Inches(0.375)
         style.paragraph_format.first_line_indent = Inches(-0.194)
         style.paragraph_format.space_after = Pt(4)
-        style.paragraph_format.line_spacing = 1.208
+        style.paragraph_format.line_spacing = 1.0
+        style.paragraph_format.keep_with_next = False
+        style.paragraph_format.keep_together = True
 
     caption = doc.styles["Caption"]
     caption.font.name = "Calibri"
@@ -303,7 +329,11 @@ def build() -> None:
     configure_page(doc)
     doc.core_properties.title = "2. Zwischenstand: Deutschlands Rolle im europäischen Stromnetz"
     doc.core_properties.author = "Jann Körner"
+    doc.core_properties.last_modified_by = "Jann Körner"
     doc.core_properties.subject = "Elm-Implementierung und Experimente"
+    doc.core_properties.comments = ""
+    doc.core_properties.created = datetime(2026, 8, 28)
+    doc.core_properties.modified = datetime(2026, 8, 28)
 
     # Editorial cover, deliberately A4 as required by the university context.
     for _ in range(4):
@@ -329,8 +359,8 @@ def build() -> None:
     for label, value in (
         ("Autor", "Jann Körner"),
         ("Modul", "Informationsvisualisierung"),
-        ("Dokument", "Bearbeitbarer zweiter Zwischenstand"),
-        ("Stand", "21. August 2026"),
+        ("Dokument", "Zweiter Zwischenstand"),
+        ("Stand", "28. August 2026"),
     ):
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -358,7 +388,7 @@ def build() -> None:
         "5 Anwendungsfälle",
         "6 Verwandte Arbeiten",
         "7 Zusammenfassung und Ausblick",
-        "Anhang: Git-Historie und KI-Unterstützung",
+        "GitHub und KI-Unterstützung",
         "Literatur",
     ):
         add_bullet(doc, item)
@@ -373,7 +403,7 @@ def build() -> None:
     add_text(doc, "Der aktuelle Beitrag besteht aus einer kompilierten Elm-Anwendung mit drei verbundenen Visualisierungen, einem reproduzierbaren PostgreSQL/PostgREST-Export und dokumentierten Interaktionstests. Die Implementierung trennt Domänentypen, JSON-Decodierung, Anwendungszustand und SVG-Views.")
 
     add_heading(doc, "2 Daten", 1)
-    add_text(doc, "Die Primärquelle ist die von der Veranstaltung bereitgestellte PostgreSQL-Datenbank. Sie wird über die ScienceData-PostgREST-Schnittstelle angesprochen. Das Exportskript fragt die benötigten Views mit Filtern und Limits ab, normalisiert die Ergebnisse und stellt sie als statische JSON-Datei bereit, die Elm anschließend per HTTP lädt. Zugangsdaten werden nicht in Elm oder Git gespeichert.")
+    add_text(doc, "Die ursprünglichen Energiedaten stammen aus Energy-Charts des Fraunhofer ISE. Für die Veranstaltung werden ausgewählte Tabellen und Views in einer PostgreSQL-Datenbank bereitgestellt und über die ScienceData-PostgREST-Schnittstelle angesprochen. Das Exportskript fragt die benötigten Views mit Filtern und Limits ab, normalisiert die Ergebnisse und stellt sie als statische JSON-Datei bereit, die Elm anschließend per HTTP lädt. Zugangsdaten werden nicht in Elm oder Git gespeichert.")
     add_table(
         doc,
         ["Funktion", "Endpunkt", "Prüfergebnis"],
@@ -385,7 +415,7 @@ def build() -> None:
         ],
         [1.55, 2.55, 2.4],
     )
-    add_text(doc, "Für die Analyse werden physische Flüsse aus v_cbpf, Handelswerte aus v_cbet, DE-LU-Preise aus v_price und deutsche Erzeugungswerte aus v_totalpower kombiniert. v_publicpower wurde geprüft, enthält für Deutschland jedoch Nullwerte. v_totalpower ist gefüllt; seine deutschen Erzeugungswerte werden von MW in GW umgerechnet.")
+    add_text(doc, "Für die Analyse werden physische Flüsse aus v_cbpf, Handelswerte aus v_cbet, DE-LU-Preise aus v_price und deutsche Erzeugungswerte aus v_totalpower kombiniert. v_publicpower wurde geprüft, enthält für Deutschland jedoch Nullwerte. Die v_totalpower-Werte liegen im verwendeten Datenausschnitt numerisch im Bereich mehrerer zehntausend Einheiten. Das Exportskript teilt sie deshalb für die Darstellung durch 1000; daraus ergeben sich plausible zweistellige Erzeugungsleistungen in GW.")
     add_heading(doc, "Verwendeter Datenausschnitt", 2)
     add_text(doc, f"Für die Implementierungs- und Interaktionstests lädt Elm {len(DATA['samples'])} Stunden des Zeitraums {DATA['period']} aus public/data/energy.json. Die Datei wurde mit scripts/build_postgrest_fixture.py direkt aus den vier PostgreSQL-Views erzeugt. Sie enthält elf Partnerländer. Viertelstundenwerte wurden auf Stundenmittel aggregiert, damit sie zu den Stundenpreisen passen.")
     add_callout(doc, "Semantische Grenze", "Der Erzeugungsmix eines Partnerlands beschreibt die zeitgleiche Produktion. Er weist nicht nach, aus welchen Energieträgern eine konkrete importierte Strommenge stammt. Die Anwendung verwendet deshalb keine Formulierungen wie „importierter Windstrom“.", BLUE)
@@ -404,11 +434,11 @@ def build() -> None:
         [0.45, 2.75, 3.3],
     )
     add_heading(doc, "3.2 Anforderungen an die Visualisierungen", 2)
-    add_text(doc, "Richtung und Betrag werden redundant codiert. Farbe unterscheidet Import und Export; Pfeilspitzen zeigen die Richtung; Linienbreite beziehungsweise Farbintensität zeigt den Betrag. Alle Ansichten verwenden dieselbe Vorzeichenkonvention. Fehlende Werte dürfen nicht als Null erscheinen. Auswahl und Datenstatus müssen sichtbar sein.")
+    add_text(doc, "Die drei Ansichten stammen aus drei vorgegebenen Bereichen: Der gerichtete Netzwerkgraph gehört zu Bäumen und Graphen, die gestapelte Zeitreihe zu Scatterplots und Zeitreihen-Diagrammen und die Pixelmatrix zu den pixelorientierten Techniken. Richtung und Betrag werden redundant codiert. Farbe unterscheidet Import und Export; Pfeilspitzen zeigen die Richtung; Linienbreite beziehungsweise Farbintensität zeigt den Betrag. Alle Ansichten verwenden dieselbe Vorzeichenkonvention. Fehlende Werte dürfen nicht als Null erscheinen. Auswahl und Datenstatus müssen sichtbar sein.")
     add_heading(doc, "3.3 Präsentation der Visualisierungen", 2)
     add_heading(doc, "3.3.1 Visualisierung Eins - gerichtete Flussansicht", 3)
     add_figure(doc, "elm_chord.png", 11.0, "Abbildung 1: Gerichtete Flussansicht, von Elm als SVG gerendert. Frankreich ist ausgewählt; übrige Verbindungen werden abgeblendet.", "Elm-SVG der gerichteten Stromflüsse zwischen Deutschland und Partnerländern")
-    add_text(doc, "Deutschland und die Partnerländer werden radial angeordnet. Die gerichteten Verbindungen zeigen die physischen Flüsse des ausgewählten Zeitpunkts. Die Ansicht ist ein fokussierter Chord-/Flussprototyp; für eine vollständige europäische Chord-Matrix sind weitere freigegebene Länder-zu-Länder-Daten erforderlich.")
+    add_text(doc, "Deutschland und die Partnerländer werden radial angeordnet. Die gerichteten Verbindungen zeigen die physischen Flüsse des ausgewählten Zeitpunkts. Die Ansicht ist ein radialer gerichteter Netzwerkgraph. Dargestellt werden ausschließlich die in den freigegebenen Daten enthaltenen Beziehungen zwischen Deutschland und seinen Partnerländern; eine vollständige europäische Länder-zu-Länder-Matrix ist nicht Bestandteil des Datenausschnitts.")
     add_heading(doc, "3.3.2 Visualisierung Zwei - gestapelte Zeitreihe", 3)
     add_figure(doc, "elm_timeline.png", 15.2, "Abbildung 2: Überarbeitete Erzeugungszeitreihe aus Elm. Die obere Y-Achse zeigt die absolute Erzeugungsleistung in GW. Der physische Fluss zu Frankreich wird darunter mit eigener symmetrischer GW-Achse dargestellt; die gestrichelte Linie markiert den gewählten Zeitpunkt.", "Elm-SVG der absoluten Erzeugungsleistung mit separatem Stromflussdiagramm")
     add_text(doc, "Die gestapelten Flächen zeigen absolute Leistungen für Erneuerbare, Kohle, Gas und Sonstige. Teilstriche und Achsenbeschriftung machen die Größenordnung in GW ablesbar. Unterhalb des Erzeugungsmixes besitzt der physische Stromfluss des ausgewählten Partnerlands ein separates Diagramm mit eigener symmetrischer Skala um null. Dadurch werden Stromfluss und Erzeugungsleistung nicht fälschlich auf derselben Y-Skala verglichen.")
@@ -453,7 +483,7 @@ def build() -> None:
     add_heading(doc, "5.1 Anwendung Visualisierung Eins", 2)
     add_text(doc, "Im Browser wurde Frankreich in der gerichteten Flussansicht ausgewählt. Die Toolbar wechselte zu „Auswahl: France“, die übrigen Verbindungen wurden abgeblendet und in der Zeitreihe erschien die violette Linie des Länderpaars. Damit wirkt die Selektion über die Grenzen der ersten View hinaus.")
     add_heading(doc, "5.2 Anwendung Visualisierung Zwei", 2)
-    add_text(doc, "Anschließend wurde in der Zeitreihe der Zeitpunkt 02.01. 00 h angeklickt. Dieser Zeitpunkt besitzt im nullbasierten Datensatz den selectedIndex 24. France blieb als Partnerauswahl erhalten. Die gestrichelte Markierung, die Chord-Werte und die Matrixauswahl wurden aus demselben Index abgeleitet. Die Detailanzeige wies für diesen Zeitpunkt 60,2 GW Gesamtleistung sowie die absoluten und prozentualen Beiträge der Erzeugungsgruppen aus; der Frankreich-Fluss betrug +0,2 GW.")
+    add_text(doc, "Anschließend wurde in der Zeitreihe der Zeitpunkt 02.01. 00 h angeklickt. Dieser Zeitpunkt besitzt im nullbasierten Datensatz den selectedIndex 24. France blieb als Partnerauswahl erhalten. Die gestrichelte Markierung, die Kantenwerte der Flussansicht und die Matrixauswahl wurden aus demselben Index abgeleitet. Die Detailanzeige wies für diesen Zeitpunkt 60,2 GW Gesamtleistung sowie die absoluten und prozentualen Beiträge der Erzeugungsgruppen aus; der Frankreich-Fluss betrug +0,2 GW.")
     add_heading(doc, "5.3 Anwendung Visualisierung Drei", 2)
     add_text(doc, "Ein Klick auf eine Zelle der Pixelmatrix setzte Partnerland und Stunde gemeinsam. Im Test zeigte die Toolbar anschließend „Denmark · 01.01. 12 h“. Die Matrix erfüllt damit ihre Rolle als Überblick und direkter Einstieg in einen Detailzustand.")
     add_table(
@@ -462,7 +492,7 @@ def build() -> None:
         [
             ["Elm-Build", "erfolgreich; sechs Module kompiliert"],
             ["HTTP-Laden", "48 Stunden aus public/data/energy.json"],
-            ["Chord-Auswahl", "Partnerfilter in allen Ansichten sichtbar"],
+            ["Flussansicht-Auswahl", "Partnerfilter in allen Ansichten sichtbar"],
             ["Zeitwahl", "selectedIndex, GW-Detailwerte und Anteilsausgabe aktualisiert"],
             ["Matrixzelle", "Partner und Zeitpunkt gemeinsam aktualisiert"],
             ["PostgreSQL", "vier Energy-Charts-Views erfolgreich exportiert"],
@@ -476,12 +506,15 @@ def build() -> None:
 
     add_heading(doc, "7 Zusammenfassung und Ausblick", 1)
     add_text(doc, "Der zweite Zwischenstand enthält nun eine reale, kompilierte Elm-Implementierung der drei verbundenen Ansichten. Die Abbildungen stammen aus der laufenden Elm-Anwendung. Datenladung, Decoder, Auswahlzustand und SVG-Views sind getrennt dokumentiert.")
-    add_text(doc, "Der PostgreSQL-Export ist für einen begrenzten Zweitagesausschnitt umgesetzt und die Elm-Screenshots wurden mit diesem Datensatz neu erzeugt. Offen bleiben längere Untersuchungszeiträume, Zoom und Aggregation, ein Top-k-Filter sowie ein kleiner Nutzertest. Zusätzlich sollte die ungewöhnliche Einheitendarstellung von v_totalpower vor der Endfassung mit der Datenbankdokumentation abgeglichen werden.")
+    add_text(doc, "Der PostgreSQL-Export ist für einen begrenzten Zweitagesausschnitt umgesetzt und die Elm-Screenshots wurden mit diesem Datensatz neu erzeugt. Als nächste Ausbaustufen sind längere Untersuchungszeiträume, Zoom und Aggregation, ein Top-k-Filter sowie ein kleiner Nutzertest vorgesehen.")
 
-    add_heading(doc, "Anhang: Git-Historie", 1)
-    add_text(doc, "Das Repository enthält Bericht, Elm-Quellcode, Builddateien, Datenprüfung, Experimente und Markdown-Dokumentation. Die Endfassung ergänzt an dieser Stelle eine exportierte Git-Historie mit nachvollziehbaren Commits für Datenzugriff, jede View, Interaktion, Tests und Bericht.")
+    add_heading(doc, "GitHub", 1)
+    add_text(doc, "Das Repository enthält Bericht, Elm-Quellcode, Builddateien, Datenprüfung, Experimente und Markdown-Dokumentation.")
+    github_paragraph = doc.add_paragraph()
+    github_paragraph.paragraph_format.space_after = Pt(8)
+    add_hyperlink(github_paragraph, "GitHub-Repository", "https://github.com/jannkrn/Projekt")
     add_heading(doc, "KI-Unterstützung", 2)
-    add_text(doc, "Bei Strukturierung, Formulierung und Codeerstellung wurde ein KI-Werkzeug eingesetzt. Die übernommenen Teile wurden durch elm make, Browserinteraktionen und visuelle Prüfung kontrolliert. Datenbankergebnisse werden nur dokumentiert, wenn sie tatsächlich abgerufen wurden. Vor der Einreichung muss der Autor Quellcode, Datenwerte, Literatur und Formulierungen eigenständig prüfen und die hochschulischen Kennzeichnungsregeln beachten.")
+    add_text(doc, "Strukturierung, Formulierung und Codeerstellung wurden durch KI (ChatGPT) unterstützt. Die fachlichen Aussagen, Datenabfragen und Implementierungsergebnisse wurden anhand der dokumentierten Builds und Tests kontrolliert.")
 
     add_heading(doc, "Literatur", 1)
     references = [
