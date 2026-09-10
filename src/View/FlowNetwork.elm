@@ -1,4 +1,4 @@
-module View.Chord exposing (view)
+module View.FlowNetwork exposing (view)
 
 import Domain exposing (Flow, Sample)
 import Html exposing (Html)
@@ -74,7 +74,7 @@ view selected sample onSelect =
                                 "0.16"
 
                 strokeWidth =
-                    String.fromFloat (2.5 + min 16 (abs flow.value * 2.4))
+                    String.fromFloat (1.5 + min 20 (abs flow.value * 3.2))
             in
             path
                 [ A.d ("M " ++ f endpoints.x1 ++ " " ++ f endpoints.y1 ++ " Q " ++ f cx ++ " " ++ f (cy - 30) ++ " " ++ f endpoints.x2 ++ " " ++ f endpoints.y2)
@@ -132,7 +132,7 @@ view selected sample onSelect =
         [ A.viewBox ("0 0 " ++ String.fromInt width ++ " " ++ String.fromInt height)
         , A.width "100%"
         , HA.attribute "role" "img"
-        , HA.attribute "aria-label" "Gerichteter Chord-Prototyp der Stromflüsse"
+        , HA.attribute "aria-label" "Radialer gerichteter Netzwerkgraph der Stromflüsse"
         ]
         ([ defs []
             [ arrow "arrow-red" "#c44545"
@@ -140,6 +140,9 @@ view selected sample onSelect =
             ]
          , circle [ A.cx (f cx), A.cy (f (cy + 82)), A.r "45", A.fill "#f2c94c", A.stroke "#8a6d08", A.strokeWidth "2" ] []
          , text_ [ A.x (f cx), A.y (f (cy + 88)), A.textAnchor "middle", A.fontFamily "Arial", A.fontWeight "700", A.fontSize "21", A.fill "#172033" ] [ Svg.text "DE" ]
+         , text_ [ A.x "18", A.y "468", A.fontFamily "Arial", A.fontSize "11", A.fontWeight "700", A.fill "#c44545" ] [ Svg.text "Rot: Import nach DE" ]
+         , text_ [ A.x "190", A.y "468", A.fontFamily "Arial", A.fontSize "11", A.fontWeight "700", A.fill "#326db6" ] [ Svg.text "Blau: Export aus DE" ]
+         , text_ [ A.x "374", A.y "468", A.fontFamily "Arial", A.fontSize "11", A.fill "#5b6472" ] [ Svg.text "Breite: |Fluss|" ]
          ]
             ++ List.indexedMap edge flows
             ++ List.indexedMap node flows
@@ -153,8 +156,8 @@ arrow markerId color =
         , A.viewBox "0 0 10 10"
         , A.refX "9"
         , A.refY "5"
-        , A.markerWidth "6"
-        , A.markerHeight "6"
+        , A.markerWidth "4"
+        , A.markerHeight "4"
         , A.orient "auto-start-reverse"
         ]
         [ path [ A.d "M 0 0 L 10 5 L 0 10 z", A.fill color ] [] ]

@@ -44,6 +44,9 @@ view samples selectedIndex selectedPartner onSelect =
         count =
             max 1 (List.length samples)
 
+        tickStride =
+            max 1 (ceiling (toFloat count / 8))
+
         x index =
             left + toFloat index * plotWidth / toFloat (max 1 (count - 1))
 
@@ -165,7 +168,7 @@ view samples selectedIndex selectedPartner onSelect =
                 ]
 
         labelAt index sample =
-            if modBy 6 index == 0 then
+            if modBy tickStride index == 0 then
                 text_
                     [ A.x (f (x index))
                     , A.y (f (flowBottom + 25))
@@ -231,6 +234,16 @@ view samples selectedIndex selectedPartner onSelect =
                         , A.fill "#4c5665"
                         ]
                         [ Svg.text "Zeitpunkt (UTC)" ]
+                   , text_
+                        [ A.x (f (left + plotWidth))
+                        , A.y (f (flowTop - 12))
+                        , A.textAnchor "end"
+                        , A.fontSize "11"
+                        , A.fontFamily "Arial"
+                        , A.fontWeight "700"
+                        , A.fill "#4c5665"
+                        ]
+                        [ Svg.text "+ Import nach Deutschland · − Export aus Deutschland" ]
                    ]
                 ++ List.indexedMap hit samples
                 ++ List.indexedMap labelAt samples
@@ -374,6 +387,9 @@ tooltipText selectedPartner sample =
         ++ "\nGesamt: "
         ++ formatNumber 1 total
         ++ " GW"
+        ++ "\nStrompreis: "
+        ++ formatNumber 1 sample.price
+        ++ " €/MWh"
         ++ "\nErneuerbare: "
         ++ formatNumber 1 generation.renewables
         ++ " GW ("

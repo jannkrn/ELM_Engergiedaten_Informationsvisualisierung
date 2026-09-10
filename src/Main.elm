@@ -7,7 +7,7 @@ import Html exposing (Html, button, div, h1, h2, p, span, text)
 import Html.Attributes exposing (class, disabled, id)
 import Html.Events exposing (onClick)
 import Http
-import View.Chord
+import View.FlowNetwork
 import View.FlowMatrix
 import View.TimeSeries
 
@@ -22,6 +22,8 @@ type alias State =
     { dataset : Dataset
     , selectedIndex : Int
     , selectedPartner : Maybe String
+    , windowStart : Int
+    , windowSize : Int
     }
 
 
@@ -30,6 +32,8 @@ type Msg
     | SelectPartner String
     | SelectTime Int
     | SelectCell String Int
+    | SetWindowSize Int
+    | MoveWindow Int
     | Reset
 
 
@@ -47,7 +51,15 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( msg, model ) of
         ( GotDataset (Ok dataset), _ ) ->
-            ( Ready { dataset = dataset, selectedIndex = 0, selectedPartner = Nothing }, Cmd.none )
+            ( Ready
+                { dataset = dataset
+                , selectedIndex = 0
+                , selectedPartner = Nothing
+                , windowStart = 0
+                , windowSize = min 168 (List.length dataset.samples)
+                }
+            , Cmd.none
+            )
 
         ( GotDataset (Err _), _ ) ->
             ( Failed "Der Datensatz konnte nicht über HTTP geladen werden.", Cmd.none )
@@ -61,8 +73,40 @@ update msg model =
         ( SelectCell country index, Ready state ) ->
             ( Ready { state | selectedPartner = Just country, selectedIndex = index }, Cmd.none )
 
+        ( SetWindowSize requestedSize, Ready state ) ->
+            let
+                sampleCount =
+                    List.length state.dataset.samples
+
+                nextSize =
+                    min sampleCount requestedSize
+
+                alignedStart =
+                    if nextSize <= 0 then
+                        0
+
+                    else
+                        state.selectedIndex - modBy nextSize state.selectedIndex
+
+                nextStart =
+                    clamp 0 (max 0 (sampleCount - nextSize)) alignedStart
+            in
+            ( Ready { state | windowStart = nextStart, windowSize = nextSize }, Cmd.none )
+
+        ( MoveWindow direction, Ready state ) ->
+            let
+                sampleCount =
+                    List.length state.dataset.samples
+
+                nextStart =
+                    clamp 0
+                        (max 0 (sampleCount - state.windowSize))
+                        (state.windowStart + direction * state.windowSize)
+            in
+            ( Ready { state | windowStart = nextStart, selectedIndex = nextStart }, Cmd.none )
+
         ( Reset, Ready state ) ->
-            ( Ready { state | selectedPartner = Nothing, selectedIndex = 0 }, Cmd.none )
+            ( Ready { state | selectedPartner = Nothing, selectedIndex = state.windowStart }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
@@ -90,16 +134,38 @@ viewDashboard state =
         current =
             sampleAt state.selectedIndex samples
 
+        visibleSamples =
+            samples
+                |> List.drop state.windowStart
+                |> List.take state.windowSize
+
+        visibleSelectedIndex =
+            clamp 0 (max 0 (List.length visibleSamples - 1)) (state.selectedIndex - state.windowStart)
+
         countryList =
             partners state.dataset
 
         selectionLabel =
             Maybe.withDefault "alle Partnerländer" state.selectedPartner
+
+        visiblePeriod =
+            case ( List.head visibleSamples, List.reverse visibleSamples |> List.head ) of
+                ( Just first, Just last ) ->
+                    first.label ++ " – " ++ last.label
+
+                _ ->
+                    "–"
+
+        canMoveBack =
+            state.windowStart > 0
+
+        canMoveForward =
+            state.windowStart + state.windowSize < List.length samples
     in
     div [ class "app-shell" ]
         [ div [ class "hero" ]
             [ div []
-                [ span [ class "eyebrow" ] [ text "ELM-PROTOTYP · ZWEITER ZWISCHENSTAND" ]
+                [ span [ class "eyebrow" ] [ text "ELM · VISUAL-ANALYTICS-PROJEKT" ]
                 , h1 [] [ text "Deutschlands Rolle im europäischen Stromnetz" ]
                 , p [ class "subtitle" ] [ text "Drei interaktiv verbundene Ansichten für physische Flüsse und Erzeugungsmix" ]
                 ]
@@ -110,23 +176,50 @@ viewDashboard state =
                 ]
             ]
         , div [ class "toolbar" ]
-            [ span [] [ text ("Zeitraum: " ++ state.dataset.period) ]
+            [ span [] [ text ("Datensatz: " ++ state.dataset.period) ]
+            , span [] [ text ("Ansicht: " ++ visiblePeriod) ]
             , span [] [ text ("Auswahl: " ++ selectionLabel ++ " · " ++ current.label) ]
             , button [ onClick Reset ] [ text "Auswahl zurücksetzen" ]
             ]
+        , div [ class "range-toolbar" ]
+            [ span [ class "range-label" ] [ text "Angezeigter Zeitraum" ]
+            , rangeButton state.windowSize 48 "48 Stunden"
+            , rangeButton state.windowSize 168 "7 Tage"
+            , rangeButton state.windowSize (List.length samples) "Gesamter Monat"
+            , button [ class "range-nav", disabled (not canMoveBack), onClick (MoveWindow -1) ] [ text "← vorheriger Zeitraum" ]
+            , button [ class "range-nav", disabled (not canMoveForward), onClick (MoveWindow 1) ] [ text "nächster Zeitraum →" ]
+            ]
         , div [ class "grid-two" ]
-            [ sectionCard "chord-view" "1 · Gerichtete Flüsse" "Klick auf eine Verbindung filtert die anderen Ansichten."
-                [ View.Chord.view state.selectedPartner current SelectPartner ]
+            [ sectionCard "flow-view" "1 · Gerichtete Flüsse" "Pfeilrichtung und Farbe zeigen Import oder Export; die Breite zeigt den Betrag."
+                [ View.FlowNetwork.view state.selectedPartner current SelectPartner ]
             , sectionCard "timeline-view" "2 · Erzeugungsmix im Zeitverlauf" "Absolute Leistung in GW; Werte und Anteile beziehen sich auf die ausgewählte Stunde."
-                [ View.TimeSeries.view samples state.selectedIndex state.selectedPartner SelectTime
+                [ View.TimeSeries.view visibleSamples visibleSelectedIndex state.selectedPartner
+                    (\localIndex -> SelectTime (state.windowStart + localIndex))
                 , legend
                 ]
             ]
-        , sectionCard "matrix-view" "3 · Pixelmatrix" "Eine Zelle wählt gleichzeitig Partnerland und Stunde."
-            [ View.FlowMatrix.view countryList samples state.selectedIndex state.selectedPartner SelectCell ]
+        , sectionCard "matrix-view" "3 · Pixelmatrix" "Eine Zelle wählt gleichzeitig Partnerland und Stunde; Zeilen und Spalten verwenden dieselbe globale Farbskala."
+            [ View.FlowMatrix.view countryList samples visibleSamples visibleSelectedIndex state.selectedPartner
+                (\country localIndex -> SelectCell country (state.windowStart + localIndex))
+            ]
         , p [ class "footnote" ]
             [ text "Vorzeichen: positive Werte = Import nach Deutschland, negative Werte = Export aus Deutschland. Der Erzeugungsmix zeigt zeitgleiche Produktion und keine physische Herkunft einzelner Importmengen." ]
         ]
+
+
+rangeButton : Int -> Int -> String -> Html Msg
+rangeButton currentSize size label =
+    button
+        [ class
+            (if currentSize == size then
+                "range-button active"
+
+             else
+                "range-button"
+            )
+        , onClick (SetWindowSize size)
+        ]
+        [ text label ]
 
 
 sectionCard : String -> String -> String -> List (Html msg) -> Html msg

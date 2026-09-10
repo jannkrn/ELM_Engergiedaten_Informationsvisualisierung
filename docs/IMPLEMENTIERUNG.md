@@ -1,105 +1,99 @@
-# Implementierung des Elm-Prototyps
+# Implementierung der Elm-Anwendung
 
 ## Architektur
 
-Der Prototyp folgt The Elm Architecture:
+Die Anwendung folgt The Elm Architecture:
 
 ```text
-HTTP-Datensatz
-    ↓
-Api.elm → Dataset
-    ↓
+public/data/energy.json
+          |
+       Api.elm  ->  Dataset
+          |
 Main.elm: Model / Msg / update
-    ├── View.Chord
-    ├── View.TimeSeries
-    └── View.FlowMatrix
+   |          |           |
+FlowNetwork  TimeSeries  FlowMatrix
 ```
 
-### `Domain.elm`
-
-Definiert `Dataset`, `Sample`, `Generation` und `Flow`. Ein `Sample` enthält
-einen Zeitpunkt, den Erzeugungsmix, den Preis sowie physische Flüsse und
-Handelswerte zu allen Partnerländern. Positive Flüsse bedeuten Import nach
-Deutschland, negative Flüsse Export aus Deutschland.
-
-### `Api.elm`
-
-Lädt `data/energy.json` mit `Http.get`. Die JSON-Decoder bilden die Daten in die
-gemeinsamen Domänentypen ab. Lade- und Fehlerzustand sind sichtbare Zustände der
-Anwendung.
-
-### `Main.elm`
-
-Der gemeinsame Zustand enthält:
+`Domain.elm` definiert `Dataset`, `Sample`, `Generation` und `Flow`.
+`Api.elm` lädt die JSON-Datei mit `Http.get` und macht Lade- sowie Fehlerzustand
+sichtbar. `Main.elm` besitzt die einzige Quelle der Wahrheit für Auswahl und
+Zeitraum:
 
 ```elm
 type alias State =
     { dataset : Dataset
     , selectedIndex : Int
     , selectedPartner : Maybe String
+    , windowStart : Int
+    , windowSize : Int
     }
 ```
 
-Relevante Nachrichten sind `SelectPartner`, `SelectTime`, `SelectCell` und
-`Reset`. Dadurch existiert eine einzige Quelle der Wahrheit für alle Ansichten.
+Die Nachrichten `SelectPartner`, `SelectTime`, `SelectCell`, `SetWindowSize`,
+`MoveWindow` und `Reset` aktualisieren diesen Zustand. Die drei Views erhalten
+nur die jeweils benötigten Werte und Ereignisfunktionen.
 
-## Visualisierungen
+## Gerichteter Netzwerkgraph
 
-### Gerichtete Flussansicht
+`src/View/FlowNetwork.elm` positioniert Deutschland und elf Partnerländer
+radial. Eine gerichtete gekrümmte Kante codiert einen bilateralen physischen
+Fluss:
 
-`View/Chord.elm` ordnet Deutschland und die Partnerländer radial an. SVG-Pfade
-verbinden Quelle und Ziel. Pfeilspitze und Farbe codieren die Richtung redundant:
+- Rot und Pfeil nach Deutschland: Import,
+- Blau und Pfeil vom deutschen Knoten: Export,
+- Linienbreite: absoluter Betrag in GW.
 
-- Rot: Import nach Deutschland,
-- Blau: Export aus Deutschland,
-- Linienbreite: Betrag des Flusses.
+Die im zweiten Zwischenstand zu großen Pfeilspitzen wurden von 6 auf 4 SVG-
+Einheiten reduziert. Gleichzeitig wurde die maximale Linienbreite auf 21,5
+Einheiten erweitert, damit starke Flüsse deutlicher hervortreten. Ein Klick auf
+Kante oder Länderknoten setzt `selectedPartner`; nicht ausgewählte Kanten werden
+abgeblendet. Der Tooltip zeigt physischen Fluss und Handel getrennt.
 
-Die Auswahl eines Partnerlands reduziert die Deckkraft der übrigen Verbindungen
-und aktiviert denselben Filter in Zeitreihe und Matrix.
+## Zeitreihe
 
-### Gestapelte Zeitreihe
+`src/View/TimeSeries.elm` zeichnet gestapelte Flächen für Erneuerbare, Kohle,
+Gas und Sonstige. Die linke Y-Achse zeigt absolute Erzeugungsleistung in GW.
+Unterhalb liegt für das ausgewählte Land ein separates Liniendiagramm mit
+symmetrischer GW-Achse. Eine sichtbare Legende erklärt das Vorzeichen: positiv
+ist Import nach Deutschland, negativ Export aus Deutschland.
 
-`View/TimeSeries.elm` erzeugt vier gestapelte SVG-Flächen für Erneuerbare,
-Kohle, Gas und Sonstige. Die linke Y-Achse zeigt die absolute Erzeugungsleistung
-in GW. Unterhalb des Erzeugungsmixes liegt ein eigenes Liniendiagramm für den
-physischen Stromfluss des ausgewählten Länderpaars. Es besitzt eine getrennte,
-symmetrische GW-Achse um die Nulllinie, damit Fluss- und Erzeugungswerte nicht
-über eine gemeinsame Skala fehlinterpretiert werden.
+Die Detailkarten nennen für die ausgewählte Stunde Gesamtleistung, absolute
+Werte und Anteile der vier Gruppen, Strompreis und gegebenenfalls den Fluss des
+Länderpaars. Eine gestrichelte Vertikale verbindet dieselbe Stunde in beiden
+Teilplots. Transparente Trefferflächen machen jeden Datenpunkt anklickbar.
 
-Für die ausgewählte Stunde werden Gesamtleistung, absolute Werte, prozentuale
-Anteile, Strompreis und – falls ein Partnerland ausgewählt ist – der physische
-Stromfluss angezeigt. Dieselben Angaben sind als Tooltip über den stündlichen
-Trefferflächen verfügbar. Eine gestrichelte Vertikale markiert den gewählten
-Zeitpunkt. Unsichtbare Trefferflächen machen jede Stunde anklickbar.
+## Pixelmatrix
 
-### Pixelmatrix
+`src/View/FlowMatrix.elm` bildet Länder auf Zeilen und Stunden auf Spalten ab.
+Alle Zellen verwenden eine einzige, über den gesamten Monatsdatensatz bestimmte
+divergierende Farbskala. Blau steht für Export, Rot für Import und Hellgrau für
+Werte nahe null; die Skalenenden werden in GW beschriftet. Damit sind Farben
+über alle Zeilen und auch zwischen den 48-Stunden- und 7-Tage-Fenstern
+vergleichbar. Zusätzliche weiße Zwischenräume wurden entfernt. Die Auswahl
+markiert nicht nur eine Zelle, sondern hebt die gesamte zugehörige Zeile und
+Spalte als goldfarbenes Fadenkreuz hervor.
 
-`View/FlowMatrix.elm` bildet Partnerländer auf Zeilen und Stunden auf Spalten ab.
-Eine divergierende Farbskala codiert Flussrichtung und Betrag. Ein Klick auf eine
-Zelle setzt Partnerland und Zeitpunkt gleichzeitig.
+## Zeitraumsteuerung
 
-## Buildprüfung
+Der Datensatz kann als 48-Stunden-Fenster, 7-Tage-Fenster oder kompletter Monat
+angezeigt werden. Vor- und Zurück-Schaltflächen verschieben begrenzte Fenster
+ohne Überlauf. Die globale Datenposition bleibt erhalten; die Views bekommen
+den sichtbaren Ausschnitt und einen korrekt umgerechneten lokalen Index.
 
-Der Stand wurde am 21.08.2026 mit Elm 0.19.1 geprüft:
+## Datenanbindung und Sicherheit
 
-```text
-Success! Compiled 6 modules.
-Main ---> public/elm.js
+`scripts/build_postgrest_fixture.py` authentifiziert sich am Seminarserver,
+paginiert begrenzte PostgREST-Abfragen und schreibt den normalisierten Export.
+Elm lädt ausschließlich diese Datei per HTTP. So kann die Anwendung statisch
+bereitgestellt werden, ohne Passwort oder Bearer-Token in JavaScript zu
+veröffentlichen.
+
+## Build
+
+Geprüft mit Elm 0.19.1:
+
+```powershell
+elm make src/Main.elm --optimize --output=public/elm.js
 ```
 
-Der generierte JavaScript-Build liegt in `public/elm.js`. `elm-stuff` bleibt
-durch `.gitignore` vom Repository ausgeschlossen.
-
-## PostgREST-Anbindung
-
-`scripts/build_postgrest_fixture.py` authentifiziert sich an
-`/sciencedata/token` und verwendet anschließend `Accept-Profile: energycharts`.
-Die begrenzten Abfragen laden `v_cbpf`, `v_cbet`, `v_price` und
-`v_totalpower`. Der Export normalisiert Viertelstundenwerte zu Stundenwerten und
-schreibt `public/data/energy.json`. Zugangsdaten und Token werden nicht in Elm
-oder Git gespeichert.
-
-Elm lädt bewusst nur den normalisierten Export. Dadurch bleibt die Anwendung
-auf statischen GitLab Pages ausführbar. Die Handelswerte aus `v_cbet` sind Teil
-des Flow-Datentyps und erscheinen gemeinsam mit dem physischen Wert im
-SVG-Tooltip der Flussansicht.
+Der Browser-Build liegt in `public/elm.js`; `elm-stuff` bleibt ignoriert.

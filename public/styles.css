@@ -53,6 +53,25 @@ h1 { margin: 8px 0 4px; font-size: clamp(28px, 3vw, 43px); line-height: 1.08; }
 .toolbar span:nth-child(2) { flex: 1; }
 .toolbar button { border: 0; border-radius: 8px; padding: 9px 13px; background: #1f334d; color: white; cursor: pointer; }
 
+.range-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: -8px 0 20px;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border: 1px solid #d6dee7;
+  border-top: 0;
+}
+.range-label { margin-right: 4px; color: #4c5665; font-size: 13px; font-weight: 700; }
+.range-button,
+.range-nav { border: 1px solid #aab7c4; border-radius: 7px; padding: 7px 10px; background: white; color: #21344d; cursor: pointer; }
+.range-button.active { border-color: #1f334d; color: white; background: #1f334d; }
+.range-nav { margin-left: auto; }
+.range-nav + .range-nav { margin-left: 0; }
+.range-nav:disabled { cursor: not-allowed; opacity: .42; }
+
 .grid-two { display: grid; grid-template-columns: minmax(420px, .82fr) minmax(620px, 1.18fr); gap: 20px; }
 .panel { background: white; border: 1px solid #d6dee7; border-radius: 14px; padding: 18px 20px 14px; box-shadow: 0 10px 26px rgba(31,51,77,.06); margin-bottom: 20px; overflow: hidden; }
 .panel-heading { display: flex; justify-content: space-between; margin-bottom: 4px; }
@@ -96,4 +115,7 @@ h1 { margin: 8px 0 4px; font-size: clamp(28px, 3vw, 43px); line-height: 1.08; }
   .grid-two { grid-template-columns: 1fr; }
   .hero { flex-direction: column; }
   .source-card { width: 100%; }
+  .toolbar { flex-wrap: wrap; }
+  .toolbar span:nth-child(2) { flex: initial; }
+  .range-nav { margin-left: 0; }
 }
