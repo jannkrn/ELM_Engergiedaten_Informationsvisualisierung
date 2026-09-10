@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import getpass
 import json
 import os
 import urllib.request
@@ -20,10 +21,8 @@ def request_json(url: str, method: str = "GET", headers: dict[str, str] | None =
 
 
 def main() -> None:
-    username = os.environ.get("ENERGYCHARTS_USER")
-    password = os.environ.get("ENERGYCHARTS_PASSWORD")
-    if not username or not password:
-        raise SystemExit("ENERGYCHARTS_USER und ENERGYCHARTS_PASSWORD müssen gesetzt sein.")
+    username = os.environ.get("ENERGYCHARTS_USER", "www26_test")
+    password = os.environ.get("ENERGYCHARTS_PASSWORD") or getpass.getpass("PostgREST-Passwort: ")
 
     basic = base64.b64encode(f"{username}:{password}".encode()).decode()
     token_response = request_json(f"{BASE}/token", "POST", {"Authorization": f"Basic {basic}"})

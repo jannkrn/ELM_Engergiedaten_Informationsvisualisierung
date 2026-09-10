@@ -8,15 +8,38 @@ import statistics
 import urllib.parse
 import urllib.request
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://dbs.informatik.uni-halle.de/sciencedata"
 SCHEMA = "energycharts"
-START = datetime(2025, 1, 1, tzinfo=timezone.utc)
-END = datetime(2025, 1, 3, tzinfo=timezone.utc)
+START = datetime.fromisoformat(os.environ.get("ENERGYCHARTS_START", "2025-05-01")).replace(tzinfo=timezone.utc)
+END = datetime.fromisoformat(os.environ.get("ENERGYCHARTS_END", "2025-06-01")).replace(tzinfo=timezone.utc)
+PAGE_SIZE = 1000
+
+GENERATION_GROUPS = {
+    "renewables": [
+        "wind_onshore_in_gw",
+        "wind_offshore_in_gw",
+        "solar_in_gw",
+        "biomass_in_gw",
+        "hydro_run_of_river_in_gw",
+        "hydro_water_reservoir_in_gw",
+        "geothermal_in_gw",
+    ],
+    "coal": ["fossil_brown_coal_lignite_in_gw", "fossil_hard_coal_in_gw"],
+    "gas": ["fossil_gas_in_gw"],
+    "other": [
+        "fossil_oil_in_gw",
+        "fossil_coal_derived_gas_in_gw",
+        "others_in_gw",
+        "waste_in_gw",
+        "hydro_pumped_storage_in_gw",
+        "nuclear_energy_in_gw",
+    ],
+}
 
 
 def request_json(url: str, headers: dict[str, str], method: str = "GET") -> object:
@@ -36,26 +59,38 @@ def authenticate(username: str, password: str) -> str:
     return payload["token"]
 
 
-def fetch_table(token: str, table: str, params: list[tuple[str, str]]) -> list[dict]:
-    url = f"{BASE}/{table}?{urllib.parse.urlencode(params)}"
+def fetch_table(
+    token: str,
+    table: str,
+    params: list[tuple[str, str]],
+    max_rows: int,
+) -> list[dict]:
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept-Profile": SCHEMA,
         "Accept": "application/json",
     }
-    result = request_json(url, headers)
-    if not isinstance(result, list):
-        raise RuntimeError(f"Unerwartete Antwort von {table}")
-    return result
+    rows: list[dict] = []
+    offset = 0
+    while offset < max_rows:
+        page_params = params + [("limit", str(PAGE_SIZE)), ("offset", str(offset))]
+        url = f"{BASE}/{table}?{urllib.parse.urlencode(page_params)}"
+        page = request_json(url, headers)
+        if not isinstance(page, list):
+            raise RuntimeError(f"Unerwartete Antwort von {table}")
+        rows.extend(page)
+        if len(page) < PAGE_SIZE:
+            return rows
+        offset += PAGE_SIZE
+    raise RuntimeError(f"Sicherheitslimit von {max_rows} Zeilen für {table} erreicht")
 
 
-def common_filters(identifier: tuple[str, str], limit: int) -> list[tuple[str, str]]:
+def common_filters(identifier: tuple[str, str], order: str) -> list[tuple[str, str]]:
     return [
         identifier,
         ("unix_seconds", f"gte.{int(START.timestamp())}"),
         ("unix_seconds", f"lt.{int(END.timestamp())}"),
-        ("order", "unix_seconds.asc"),
-        ("limit", str(limit)),
+        ("order", order),
     ]
 
 
@@ -71,34 +106,14 @@ def hourly_rows(rows: list[dict], field: str, scale: float = 1.0) -> dict[int, f
 
 
 def grouped_generation(rows: list[dict]) -> dict[str, dict[int, float]]:
-    groups = {
-        "renewables": [
-            "wind_onshore_in_gw",
-            "wind_offshore_in_gw",
-            "solar_in_gw",
-            "biomass_in_gw",
-            "hydro_run_of_river_in_gw",
-            "hydro_water_reservoir_in_gw",
-            "geothermal_in_gw",
-        ],
-        "coal": ["fossil_brown_coal_lignite_in_gw", "fossil_hard_coal_in_gw"],
-        "gas": ["fossil_gas_in_gw"],
-        "other": [
-            "fossil_oil_in_gw",
-            "fossil_coal_derived_gas_in_gw",
-            "others_in_gw",
-            "waste_in_gw",
-            "hydro_pumped_storage_in_gw",
-            "nuclear_energy_in_gw",
-        ],
-    }
     result: dict[str, dict[int, float]] = {}
-    for group, fields in groups.items():
+    for group, fields in GENERATION_GROUPS.items():
         buckets: dict[int, list[float]] = defaultdict(list)
         for row in rows:
             timestamp = int(row["unix_seconds"])
             hour = timestamp - timestamp % 3600
-            # v_totalpower stores German generation in MW despite the column suffix.
+            # The official Energy-Charts /total_power endpoint documents MW.
+            # The seminar view retains those numeric values despite its _in_gw suffix.
             buckets[hour].append(sum(float(row.get(field) or 0) for field in fields) / 1000)
         result[group] = {timestamp: statistics.fmean(values) for timestamp, values in buckets.items()}
     return result
@@ -120,7 +135,10 @@ def partner_series(rows: list[dict], field: str) -> dict[str, dict[int, float]]:
 
 
 def main() -> None:
-    username = os.environ.get("ENERGYCHARTS_USER", "demo_user")
+    if END <= START:
+        raise SystemExit("ENERGYCHARTS_END muss nach ENERGYCHARTS_START liegen.")
+
+    username = os.environ.get("ENERGYCHARTS_USER", "www26_test")
     password = os.environ.get("ENERGYCHARTS_PASSWORD") or getpass.getpass("PostgREST-Passwort: ")
     token = authenticate(username, password)
 
@@ -128,32 +146,53 @@ def main() -> None:
         token,
         "v_cbpf",
         [("select", "unix_seconds,country_name,cross_boarder_physical_flow_in_gw")]
-        + common_filters(("country_id", "eq.de"), 5000),
+        + common_filters(("country_id", "eq.de"), "unix_seconds.asc,country_name.asc"),
+        max_rows=50000,
     )
     cbet = fetch_table(
         token,
         "v_cbet",
         [("select", "unix_seconds,country_name,cross_boarder_electricity_trading_in_gw")]
-        + common_filters(("country_id", "eq.de"), 5000),
+        + common_filters(("country_id", "eq.de"), "unix_seconds.asc,country_name.asc"),
+        max_rows=50000,
     )
     totalpower = fetch_table(
         token,
         "v_totalpower",
-        common_filters(("country_id", "eq.de"), 500),
+        [("select", "unix_seconds," + ",".join(sorted({field for fields in GENERATION_GROUPS.values() for field in fields})))]
+        + common_filters(("country_id", "eq.de"), "unix_seconds.asc"),
+        max_rows=5000,
     )
     price = fetch_table(
         token,
         "v_price",
         [("select", "unix_seconds,price")]
-        + common_filters(("market_id", "eq.DE-LU"), 100),
+        + common_filters(("market_id", "eq.DE-LU"), "unix_seconds.asc"),
+        max_rows=2000,
     )
 
     physical = partner_series(cbpf, "cross_boarder_physical_flow_in_gw")
     trading = partner_series(cbet, "cross_boarder_electricity_trading_in_gw")
     generation = grouped_generation(totalpower)
     prices = hourly_rows(price, "price")
-    hours = sorted(set(prices) & set(generation["renewables"]))
-    partners = sorted(physical)
+    hours = sorted(
+        set(prices)
+        & set(generation["renewables"])
+        & set(generation["coal"])
+        & set(generation["gas"])
+        & set(generation["other"])
+    )
+    expected_hours = int((END - START).total_seconds() / 3600)
+    if len(hours) != expected_hours:
+        raise RuntimeError(f"Erwartet: {expected_hours} vollständige Stunden; gefunden: {len(hours)}")
+
+    partners = sorted(
+        country
+        for country, series in physical.items()
+        if all(timestamp in series for timestamp in hours)
+    )
+    if not partners:
+        raise RuntimeError("Keine Partnerländer mit vollständiger Abdeckung gefunden")
 
     samples = []
     for timestamp in hours:
@@ -176,8 +215,8 @@ def main() -> None:
 
     output = {
         "source": "Energy-Charts · PostgreSQL/PostgREST",
-        "sourceStatus": "Schema energycharts · Views v_cbpf, v_cbet, v_price, v_totalpower",
-        "period": "01.-02. Januar 2025 (UTC)",
+        "sourceStatus": "v_totalpower: MW→GW · v_cbpf/v_cbet: GW · v_price: EUR/MWh",
+        "period": f"{START.strftime('%d.%m.%Y')}–{(END - timedelta(days=1)).strftime('%d.%m.%Y')} (UTC)",
         "samples": samples,
     }
     target = ROOT / "public" / "data" / "energy.json"

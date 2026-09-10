@@ -10,7 +10,22 @@
 
 # Temporäre Dateien
 ~$*.docx
+__pycache__/
+*.pyc
 *.log
 .DS_Store
 Thumbs.db
 
+# LaTeX-Buildartefakte (PDF bleibt versioniert)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc

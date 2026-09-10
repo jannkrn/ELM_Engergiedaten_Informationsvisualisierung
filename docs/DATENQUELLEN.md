@@ -1,78 +1,93 @@
 # Datenquellen und Datenpfad
 
-## Primärquelle: Energy-Charts in PostgreSQL
+## Verwendete Quellen
 
-Die Energy-Charts-Daten sind über PostgREST unter folgender Basis-URL
-erreichbar:
+Die Primärdaten stammen aus Energy-Charts und werden in der Veranstaltung über
+PostgREST bereitgestellt:
 
 ```text
 https://dbs.informatik.uni-halle.de/sciencedata
 ```
 
-Die Authentifizierung erfolgt mit `POST /token` und HTTP Basic Authentication.
-Nach erfolgreicher Anmeldung wird der JWT als Bearer-Token gesendet. Für alle
-fachlichen Tabellen und Views muss zusätzlich dieser Header gesetzt werden:
+Für fachliche Views wird `Accept-Profile: energycharts` gesetzt. Die
+Authentifizierung erfolgt über `POST /token`; Passwort und Token werden weder
+im Repository noch im Browsercode gespeichert. Verwendet werden:
 
-```http
-Accept-Profile: energycharts
+| View | Inhalt | Originaleinheit | Verwendung |
+|---|---|---:|---|
+| `v_cbpf` | grenzüberschreitende physische Flüsse | GW | Netzwerk, Zeitreihe, Matrix |
+| `v_cbet` | grenzüberschreitender Stromhandel | GW | Tooltip der Netzwerkansicht |
+| `v_price` | Day-Ahead-Preis DE-LU | EUR/MWh | Stundendetail und Analyse |
+| `v_totalpower` | gesamte Nettoerzeugung einschließlich industrieller Eigenerzeugung | MW | Erzeugungsmix |
+
+Die Einheiten sind nicht geraten, sondern der offiziellen Energy-Charts-
+OpenAPI-Beschreibung entnommen (`/cbpf`, `/cbet`, `/price`, `/total_power`):
+
+```text
+https://api.energy-charts.info/openapi.json
 ```
 
-Am 21.08.2026 lieferte die OpenAPI-Beschreibung 66 Ressourcen. Für den
-Prototyp werden ausschließlich folgende Views verwendet:
+Energy-Charts definiert für CBPF und CBET positive Werte als Import und
+negative Werte als Export. Der Endpunkt `total_power` liefert MW. Die
+Seminar-View `v_totalpower` trägt zwar Spaltennamen mit dem Suffix `_in_gw`,
+enthält aber die MW-großen Originalwerte; deshalb dividiert das Exportskript
+diese Werte explizit durch 1000. Die Anwendung zeigt danach GW.
 
-| View | Verwendung | zentrale Felder |
-|---|---|---|
-| `v_cbpf` | physische Grenzflüsse | `country_name`, `cross_boarder_physical_flow_in_gw` |
-| `v_cbet` | grenzüberschreitender Handel | `country_name`, `cross_boarder_electricity_trading_in_gw` |
-| `v_price` | Strompreis DE-LU | `market_id`, `price` |
-| `v_totalpower` | deutscher Erzeugungsmix | Erzeugungsarten in separaten Spalten |
+## Zeitraum und Begründung
 
-`v_publicpower` wurde geprüft, enthält für `country_id=de` jedoch nur
-Nullwerte. Deshalb verwendet der Export die inhaltlich gefüllte View
-`v_totalpower`. Deren deutschen Erzeugungswerte sind trotz des Suffixes
-`_in_gw` als MW-Werte gespeichert; das Exportskript teilt sie durch 1000.
+Der analysierte Zeitraum ist der gesamte Mai 2025 in UTC. Er umfasst 744
+aufeinanderfolgende Stunden und elf Partnerländer. Ein voller Monat ist lang
+genug, um Tages- und Wochenmuster sowie Richtungswechsel zu vergleichen, bleibt
+aber in einer Pixelmatrix noch ohne zusätzliche Aggregation untersuchbar. Der
+Mai 2025 enthält außerdem starke Kontraste: 129 Stunden mit negativem
+Day-Ahead-Preis, ein Minimum von -250,32 EUR/MWh am 11.05. um 11 Uhr UTC und ein
+Maximum von 229,11 EUR/MWh am 19.05. um 18 Uhr UTC. Damit eignet sich der Monat
+für die Forschungsfrage nach Zusammenhängen zwischen Flüssen, Erzeugungsmix
+und Preisen, ohne nur ein einzelnes Extremereignis auszuwählen.
 
-## Begrenzte Abfragen
+## Export und Transformation
 
-Der Export für 01.-02.01.2025 filtert bereits auf Zeitraum, Deutschland und
-Gebotszone. Jede Anfrage besitzt außerdem ein explizites Limit:
+`scripts/build_postgrest_fixture.py` nutzt serverseitige Zeit-, Länder- und
+Marktfilter sowie Seiten von maximal 1000 Zeilen. Für den Mai 2025 wurden
+35.712 CBPF-, 35.712 CBET-, 2.976 Erzeugungs- und 744 Preiszeilen abgerufen.
+Viertelstundenwerte werden je Stunde arithmetisch gemittelt. Anschließend werden
+die Erzeugungsarten zu vier Gruppen zusammengefasst:
 
-- `v_cbpf`: `country_id=eq.de`, Limit 5000,
-- `v_cbet`: `country_id=eq.de`, Limit 5000,
-- `v_totalpower`: `country_id=eq.de`, Limit 500,
-- `v_price`: `market_id=eq.DE-LU`, Limit 100.
+- Erneuerbare: Wind an Land und auf See, Solar, Biomasse, Lauf- und
+  Speicherwasser sowie Geothermie,
+- Kohle: Braun- und Steinkohle,
+- Gas: fossiles Gas,
+- Sonstige: Öl, Kohlegase, Abfall, Pumpspeicher, Kernenergie und sonstige
+  Erzeugung.
 
-Tatsächlich wurden 2304 CBPF-Zeilen, 2304 CBET-Zeilen, 192 Erzeugungszeilen
-und 48 Preiszeilen geladen. Die Viertelstundenwerte werden auf Stundenmittel
-aggregiert. Ergebnis sind 48 Stunden und elf Partnerländer.
+Der normalisierte Datensatz `public/data/energy.json` enthält pro Stunde
+Zeitstempel, vier Erzeugungsgruppen in GW, Preis in EUR/MWh sowie physische und
+gehandelte Flüsse je Partnerland in GW.
 
-## Reproduzierbarer Export
+## Qualitätskontrollen
 
-Das Skript `scripts/build_postgrest_fixture.py` erzeugt
-`public/data/energy.json`. Der Benutzername kann über `ENERGYCHARTS_USER`
-gesetzt werden. Das Passwort wird entweder zur Laufzeit verdeckt abgefragt oder
-über `ENERGYCHARTS_PASSWORD` bereitgestellt. Passwort und Token werden weder
-gespeichert noch ausgegeben.
+`scripts/validate_dataset.py` prüft:
 
-```powershell
-python scripts/build_postgrest_fixture.py
-elm make src/Main.elm --output=public/elm.js
-```
+- genau 744 lückenlose Stunden,
+- identische Abdeckung und Reihenfolge von elf Partnerländern,
+- endliche Messwerte und nichtnegative Erzeugungsgruppen,
+- das Auftreten positiver und negativer Flüsse,
+- grobe Plausibilitätsgrenzen nach der Umrechnung in GW.
 
-Die normalisierte JSON-Datei enthält pro Stunde:
+Die letzte Prüfung am 10.09.2026 ergab 123 Stunden mit positivem und 621
+Stunden mit negativem summiertem physischen Fluss sowie 40 Wechsel des
+Vorzeichens. Diese Summen sind eine aus den bilateralen Werten abgeleitete
+Analysegröße, kein separates Energy-Charts-Messfeld.
 
-- gruppierten deutschen Erzeugungsmix,
-- DE-LU-Strompreis,
-- physischen Fluss pro Partnerland,
-- Handelswert pro Partnerland.
+## Zugang und Bereitstellung
 
-Positive physische Flüsse bedeuten Import nach Deutschland, negative Werte
-Export aus Deutschland. Physischer Fluss und Handel bleiben getrennte Werte.
+Der in der Aufgabenbeschreibung genannte Benutzer `www26_test` lieferte am
+10.09.2026 bei der Token-Anforderung HTTP 401. Der gespeicherte Datensatz wurde
+deshalb mit dem ebenfalls bereitgestellten, funktionierenden Seminarzugang
+exportiert. Das Skript verwendet standardmäßig `www26_test`, erlaubt aber eine
+explizite Übergabe über `ENERGYCHARTS_USER`.
 
-## CORS
-
-Die CORS-Preflight-Anfragen für `POST /token` und `GET /v_cbpf` wurden von der
-ScienceData-Schnittstelle mit HTTP 204 beantwortet. Die lokale Origin sowie
-`Authorization` und `Accept-Profile` wurden erlaubt. Der produktive Prototyp
-lädt dennoch den vorab normalisierten JSON-Export, damit kein Passwort in einer
-statischen GitLab-Pages-Anwendung eingegeben oder gespeichert werden muss.
+Die statische Anwendung lädt den normalisierten Export über HTTP. Dadurch
+funktioniert sie auf GitLab Pages, ohne vertrauliche Zugangsdaten an
+Browsernutzer auszuliefern. Die Daten bleiben durch das Exportskript aus der
+PostgreSQL-Datenbank reproduzierbar.
