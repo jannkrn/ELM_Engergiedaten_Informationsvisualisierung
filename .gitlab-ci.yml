@@ -1,0 +1,18 @@
+image: node:22
+
+create-pages:
+  pages:
+    publish: public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  cache:
+    paths:
+      - elm-stuff/
+      - .npm/
+  before_script:
+    - npm config set cache .npm --global
+    - npm install -g elm@0.19.1-6 --unsafe-perm=true
+  script:
+    - elm make src/Main.elm --optimize --output=public/elm.js
+    - test -f public/index.html
+    - test -f public/data/energy.json
