@@ -1,0 +1,137 @@
+\section{Anwendungsfälle}
+\label{sec:anwendungsfaelle}
+
+Die folgenden Fälle zeigen jeweils einen fachlich interpretierbaren Befund und
+den dafür benötigten Interaktionsweg. Die drei Zustände sind keine zwingende
+lineare Klickfolge: Für jeden Fall wird die passende Zeitspanne gewählt. So
+führt der Dänemark-Zustand in \cref{sec:case3} nicht versehentlich den zuvor
+gewählten Frankreich-Zustand fort, sondern demonstriert einen unabhängigen
+Einstieg über die Matrix.
+
+\subsection{Anwendung Visualisierung Eins}
+\label{sec:case1}
+
+Ausgangspunkt ist der 1. Mai 2025 um 00 Uhr UTC. Ein Klick auf Frankreich im
+gerichteten Netzwerk wählt das Länderpaar. In \cref{fig:case-france} sind
+Frankreichs Knoten gelb und seine Kante kräftig, während die übrigen Kanten
+abgeblendet sind. Die rote Pfeilrichtung zeigt einen kleinen physischen Import
+von Frankreich nach Deutschland (\(+0{,}058\gw\)). Der Tooltip nennt zugleich
+einen Handelswert von \(-2{,}940\gw\), also kommerziellen Export in der hier
+verwendeten Vorzeichenkonvention.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (img) at (0,0)
+      {\includegraphics[width=0.70\textwidth]{02_frankreich_netzwerk.png}};
+    \begin{scope}[x={(img.south east)},y={(img.north west)}]
+      \draw[importred,very thick,-{Latex[length=3mm]}]
+        (0.91,0.68) node[above left,fill=white,rounded corners,inner sep=2pt,
+          text=importred,font=\sffamily\bfseries\small]{1: gewählte Beziehung}
+        -- (0.735,0.385);
+      \draw[projectyellow!70!black,very thick]
+        (0.735,0.38) circle[radius=0.032];
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Frankreich ist ausgewählt. Knoten und Kante bleiben hervorgehoben;
+    die rote Richtung steht für physischen Import nach Deutschland.}
+  \label{fig:case-france}
+\end{figure}
+
+Der Befund ist für die Zielgruppe wichtig, weil er unmittelbar zeigt, warum
+Handel und physischer Fluss nicht synonym verwendet werden dürfen. Eine Tabelle
+könnte die beiden exakten Werte sogar schneller liefern, würde aber nicht
+gleichzeitig sichtbar machen, wie schwach die ausgewählte physische Kante im
+Vergleich zu starken Exportkanten nach Österreich, in die Schweiz oder nach
+Polen ist. Der Netzwerkgraph liefert den relationalen Kontext; der Tooltip
+liefert die Präzision.
+
+\subsection{Anwendung Visualisierung Zwei}
+\label{sec:case2}
+
+Für die Woche vom 8. bis 14. Mai wird Frankreich gewählt und anschlie{\ss}end der
+11. Mai 2025 um 11 Uhr UTC angeklickt. Die gestrichelte Vertikale in
+\cref{fig:case-price} verbindet Erzeugungsmix und Frankreich-Fluss. In dieser
+Stunde beträgt die erneuerbare Leistung \(58{,}961\gw\), entsprechend
+88,7\,\% der dargestellten Gesamterzeugung von etwa \(66{,}5\gw\). Der
+Day-Ahead-Preis erreicht mit \(-250{,}32\mwh\) das Monatsminimum, während aus
+Frankreich physisch \(+1{,}382\gw\) importiert werden.
+
+\begin{figure}[p]
+  \centering
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (img) at (0,0)
+      {\includegraphics[width=0.98\textwidth]{03_negativpreis_zeitreihe.png}};
+    \begin{scope}[x={(img.south east)},y={(img.north west)}]
+      \draw[importred,very thick,-{Latex[length=3mm]}]
+        (0.69,0.96) node[below,fill=white,rounded corners,inner sep=2pt,
+          text=importred,font=\sffamily\bfseries\small]{1: gewählte Stunde}
+        -- (0.535,0.69);
+      \draw[projectblue,very thick,-{Latex[length=3mm]}]
+        (0.87,0.90) node[below,fill=white,rounded corners,inner sep=2pt,
+          text=projectblue,font=\sffamily\bfseries\small]{2: Preis und Absolutwerte}
+        -- (0.535,0.17);
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Monatliches Preisminimum. Die gemeinsame Zeitmarke verbindet
+    erneuerbare Erzeugung, Frankreich-Fluss und Detailwerte.}
+  \label{fig:case-price}
+\end{figure}
+
+Über den ganzen Mai korreliert der Preis mit der absoluten erneuerbaren
+Leistung mit \(r=-0{,}758\), mit ihrem Anteil sogar mit \(r=-0{,}817\). Dies
+ist ein sichtbares und statistisch gestütztes Monatsmuster, aber kein
+Kausalnachweis. Der einfache summierte physische Fluss korreliert dagegen nur
+mit \(r=0{,}084\) mit dem Preis. Die Anwendung verhindert damit eine zu einfache
+Erzählung ``mehr Export erklärt negative Preise'': Der konkrete Länderfluss,
+andere Erzeugungsarten, Nachfrage, Netzrestriktionen und Markteffekte können
+abweichen.
+
+Ein Scatterplot von Preis und erneuerbarer Leistung wäre für die Korrelation
+präziser und ist eine sinnvolle spätere Ergänzung. Er würde jedoch die
+Reihenfolge der Stunden, Tagesmuster und den zeitgleichen Frankreich-Fluss
+verbergen. Für die Untersuchung eines Ereignisverlaufs ist die gekoppelte
+Zeitreihe geeigneter; für einen globalen Zusammenhang wäre der Scatterplot
+effizienter.
+
+\subsection{Anwendung Visualisierung Drei}
+\label{sec:case3}
+
+Nach Rückkehr zum 48-Stunden-Fenster 3.--4. Mai wird die Matrixzelle Dänemark,
+3. Mai um 12 Uhr angeklickt. \Cref{fig:case-matrix} markiert die vollständige
+Dänemark-Zeile und die 12-Uhr-Spalte als Fadenkreuz. Die aktive Zelle zeigt
+einen Export aus Deutschland von \(-1{,}710\gw\). In derselben Spalte sind
+auch Österreich, Belgien, Tschechien, Luxemburg, Niederlande, Norwegen, Polen,
+Schweden und Schweiz blau oder nahe neutral, während Frankreich rötlich ist
+(\(+0{,}582\gw\) Import).
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (img) at (0,0)
+      {\includegraphics[width=\textwidth]{04_daenemark_matrix.png}};
+    \begin{scope}[x={(img.south east)},y={(img.north west)}]
+      \draw[importred,very thick,-{Latex[length=3mm]}]
+        (0.14,0.93) node[right,fill=white,rounded corners,inner sep=2pt,
+          text=importred,font=\sffamily\bfseries\small]{1: Partnerzeile}
+        -- (0.30,0.62);
+      \draw[projectblue,very thick,-{Latex[length=3mm]}]
+        (0.50,0.94) node[right,fill=white,rounded corners,inner sep=2pt,
+          text=projectblue,font=\sffamily\bfseries\small]{2: Stunde}
+        -- (0.346,0.62);
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Auswahl der Zelle Dänemark, 03.05.2025 12 Uhr UTC. Das goldene
+    Fadenkreuz macht beide gewählten Dimensionen sichtbar.}
+  \label{fig:case-matrix}
+\end{figure}
+
+Die visuelle Aufgabe besteht nicht nur darin, einen Einzelwert abzulesen,
+sondern das gleichzeitige Länderprofil zu sehen. Das Muster legt nahe, dass der
+deutsche physische Austausch in dieser Stunde gegenüber vielen Partnern in
+Exportrichtung verlief, aber nicht gegenüber Frankreich. Die globale Farbskala
+macht die Sättigungen zeilenübergreifend vergleichbar. Eine Tabelle wäre für
+den Wert \(-1{,}710\gw\) genauer, verlangte für das Profil jedoch serielles
+Lesen von elf Zeilen. Elf Linien hätten stärkere Überdeckung. Die Matrix
+unterstützt das parallele Erkennen, die gekoppelten Detailansichten übernehmen
+die quantitative Prüfung.

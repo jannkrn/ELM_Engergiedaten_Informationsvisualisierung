@@ -1,0 +1,133 @@
+\section{Daten}
+\label{sec:daten}
+
+\subsection*{Datenbestand und Einheiten}
+
+Die Primärdaten werden über den PostgREST-Dienst
+\url{https://dbs.informatik.uni-halle.de/sciencedata} aus dem Schema
+\code{energycharts} gelesen. Die vier in \cref{tab:views} aufgeführten Views
+decken die benötigten Dimensionen Zeit, Partnerland, Erzeugungsart und Preis
+ab. Der Header \code{Accept-Profile: energycharts} wählt das Schema; ein zuvor
+bezogenes Bearer-Token autorisiert die Anfrage.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Verwendete PostgreSQL-Views und semantische Einheiten.}
+  \label{tab:views}
+  \begin{tabularx}{\textwidth}{@{}lXl@{}}
+    \toprule
+    View & Inhalt & Einheit \\
+    \midrule
+    \code{v\_cbpf} & bilateraler physischer Grenzfluss; positiv Import nach
+      Deutschland, negativ Export aus Deutschland & GW \\
+    \code{v\_cbet} & bilateraler grenzüberschreitender Handel mit derselben
+      Vorzeichenkonvention & GW \\
+    \code{v\_price} & Day-Ahead-Preis der Gebotszone DE--LU & EUR/MWh \\
+    \code{v\_totalpower} & gesamte deutsche Nettoerzeugung einschlie{\ss}lich
+      industrieller Eigenerzeugung, getrennt nach Technologien & MW \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Die Einheit von \code{v\_totalpower} ist erklärungsbedürftig: Ihre Spaltennamen
+enden auf \code{\_in\_gw}, die Werte besitzen aber die Grö{\ss}enordnung der vom
+offiziellen Endpunkt \code{/total\_power} dokumentierten MW-Werte. Beispielsweise
+tritt Windleistung als fünfstelliger Wert auf. Deshalb wird nicht anhand eines
+vermuteten Zahlenbereichs ``passend gemacht'', sondern entsprechend der
+offiziellen Energy-Charts-Spezifikation von MW nach GW umgerechnet
+\cite{energychartsOpenapi}. Die anderen drei Grö{\ss}en werden ohne
+Einheitenumrechnung übernommen.
+
+\subsection*{Auswahl des Zeitraums}
+
+Untersucht wird der 1. bis 31. Mai 2025 in UTC. Die Auswahl eines vollständigen
+Monats vermeidet den willkürlichen Zuschnitt auf zwei besonders auffällige
+Tage. 744 Stunden sind gro{\ss} genug, um Tages- und Wochenmuster, Richtungswechsel
+und mehrere Preisregime zu enthalten. Gleichzeitig bleiben die 744 Spalten
+einer Pixelmatrix bei einer Monatsübersicht und die 168 Spalten eines
+Wochenfensters technisch handhabbar.
+
+Die Wahl ist auch inhaltlich ergiebig. Die Datenprüfung findet 129 Stunden mit
+negativem Preis, einen Minimalpreis von \(-250{,}32\mwh\) am 11. Mai um
+11 Uhr UTC sowie ein Maximum von \(229{,}11\mwh\) am 19. Mai um 18 Uhr UTC.
+Die erneuerbare Leistung erreicht maximal \(71{,}465\gw\). Damit enthält der
+Monat hohe und niedrige erneuerbare Einspeisung sowie positive und negative
+Preise, ohne dass ausschlie{\ss}lich ein vorab bekanntes Ereignis betrachtet wird.
+
+\subsection*{Abfrage und Vorverarbeitung}
+
+Das Skript \code{scripts/build\_postgrest\_fixture.py} setzt serverseitige
+Filter für Zeit, Deutschland beziehungsweise DE--LU sowie eine Sortierung nach
+Unix-Zeitstempel. Es paginiert in Seiten von höchstens 1000 Zeilen und besitzt
+für jede View ein Sicherheitslimit. Dieses Vorgehen verhindert unbegrenzte
+Anfragen an die gro{\ss}en Tabellen und folgt dem von PostgREST vorgesehenen
+Limit-/Offset-Prinzip \cite{postgrestPagination}. Für den ausgewählten Monat
+wurden 35.712 CBPF-, 35.712 CBET-, 2.976 Erzeugungs- und 744 Preiszeilen
+abgerufen.
+
+Die Rohdaten enthalten je nach View viertelstündliche oder stündliche Werte.
+Um alle Variablen auf derselben Zeitachse vergleichen zu können, werden Werte
+innerhalb derselben UTC-Stunde arithmetisch gemittelt. Das Mittel ist hier
+sinnvoll, weil die dargestellten Grö{\ss}en Leistung beziehungsweise Preis und
+nicht Energiemengen sind. Eine Summe der vier Viertelstunden-Leistungswerte
+würde die Einheit verfälschen. Anschlie{\ss}end werden Erzeugungstechnologien zu
+vier semantisch lesbaren Gruppen aggregiert, siehe \cref{tab:generation}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Gruppierung der Erzeugungstechnologien.}
+  \label{tab:generation}
+  \begin{tabularx}{\textwidth}{@{}lX@{}}
+    \toprule
+    Gruppe & enthaltene Technologien \\
+    \midrule
+    Erneuerbare & Wind an Land und auf See, Solar, Biomasse, Laufwasser,
+      Speicherwasser und Geothermie \\
+    Kohle & Braunkohle und Steinkohle \\
+    Gas & fossiles Gas \\
+    Sonstige & Öl, Kohlegase, Abfall, Pumpspeicher, Kernenergie und sonstige
+      Erzeugung \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Die Zusammenfassung reduziert visuelle Komplexität, kostet aber Detail: Ein
+Anstieg von Wind kann einen Rückgang von Solar innerhalb ``Erneuerbare''
+überdecken. Für die Projektfrage ist die Gruppe dennoch angemessen, weil zuerst
+der Zusammenhang des gesamten erneuerbaren Anteils mit Flüssen und Preis
+untersucht wird. Ein späterer Drill-down auf Einzeltechnologien bleibt als
+Erweiterung möglich.
+
+\subsection*{Normalisiertes Format und Bereitstellung}
+
+Das Exportskript schreibt \code{public/data/energy.json}. Jeder der 744
+Stundeneinträge enthält Unix-Zeitstempel, deutschsprachiges Kurzlabel, vier
+Erzeugungsgruppen in GW, Preis in EUR/MWh und für elf Partnerländer je einen
+physischen sowie einen gehandelten Fluss in GW. Das Format orientiert sich
+direkt am Elm-Domänenmodell und vermeidet, dass die Browseranwendung mehrere
+gro{\ss}e Tabellen clientseitig zusammenführen muss.
+
+Elm lädt diese Datei mit \code{Http.get}. Das ist weiterhin ein echter
+HTTP-Datenpfad, zugleich aber für eine statische GitLab-Pages-Anwendung sicher:
+Weder Datenbankpasswort noch Bearer-Token erscheinen im ausgelieferten
+JavaScript. Der Rohdatenexport ist durch das Skript reproduzierbar. Am
+10. September 2026 lieferte der für die Veranstaltung genannte Benutzer
+\code{www26\_test} bei der Token-Anforderung HTTP~401; der vorhandene Datensatz
+wurde deshalb mit dem ebenfalls in der Aufgabenbeschreibung bereitgestellten
+Seminarzugang erzeugt. Zugangsdaten selbst werden nicht versioniert.
+
+\subsection*{Datenqualität und Eignung}
+
+\code{scripts/validate\_dataset.py} prüft 744 lückenlose Stundenschritte,
+identische Partnerabdeckung, endliche Werte, nichtnegative Erzeugungsgruppen
+und grobe GW-Plausibilitätsgrenzen. Positive und negative physische Flüsse
+kommen beide vor. Der aus elf bilateralen Werten je Stunde gebildete Summenfluss
+ist eine eigene explorative Kenngrö{\ss}e und wird nicht als separates
+Energy-Charts-Messfeld ausgegeben.
+
+Die Daten sind für die Forschungsfrage geeignet, weil alle benötigten
+Variablen zeitlich ausgerichtet vorliegen. Grenzen bleiben: Ein Monat trägt
+keine saisonale Aussage, \code{v\_totalpower} enthält industrielle
+Eigenerzeugung, und aus gleichzeitiger Erzeugung und Grenzfluss lässt sich keine
+physische Herkunft importierter Energie ableiten. Diese Einschränkungen werden
+in Anwendung und Interpretation sichtbar gemacht.

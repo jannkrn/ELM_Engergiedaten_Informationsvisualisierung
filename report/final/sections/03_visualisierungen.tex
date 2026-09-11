@@ -1,0 +1,195 @@
+\section{Visualisierungen}
+\label{sec:visualisierungen}
+
+Dieses Kapitel leitet die Darstellung vom Zielproblem her. Zunächst werden
+Aufgaben ohne Festlegung auf Diagrammtypen analysiert. Daraus folgen
+Anforderungen; erst anschlie{\ss}end werden die drei visuellen Kodierungen und
+ihre Alternativen begründet. \Cref{fig:overview} zeigt die gemeinsame
+Oberfläche in der Standardansicht.
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.79\textheight,keepaspectratio]{01_uebersicht.png}
+  \caption{Gesamtansicht der Elm-Anwendung mit Netzwerk, Zeitreihe und
+    Pixelmatrix. Alle Zahlen und SVG-Geometrien werden von Elm aus dem
+    HTTP-Datensatz erzeugt.}
+  \label{fig:overview}
+\end{figure}
+
+\subsection{Analyse der Anwendungsaufgaben}
+\label{sec:aufgaben}
+
+Aus der Forschungsfrage entstehen drei miteinander verbundene
+Anwendungsaufgaben. Sie werden in \cref{tab:tasks} unabhängig von einer
+konkreten Visualisierung formuliert.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Anwendungsaufgaben und dafür benötigte mentale Modelle.}
+  \label{tab:tasks}
+  \begin{tabularx}{\textwidth}{@{}p{0.08\textwidth}p{0.39\textwidth}X@{}}
+    \toprule
+    ID & Aufgabe & aufzubauendes mentales Modell \\
+    \midrule
+    A1 & Für eine Stunde erkennen, zwischen welchen Partnerländern und
+      Deutschland physische Leistung in welcher Richtung und Grö{\ss}enordnung
+      flie{\ss}t. & Deutschland als Zentrum eines gerichteten, gewichteten Netzes;
+      Länderbeziehungen statt isolierter Tabellenzeilen. \\
+    A2 & Zeitliche Muster und Ausnahmen in Erzeugungsmix, Preis und dem Fluss
+      eines ausgewählten Länderpaars untersuchen. & Gemeinsame Zeitachse mit
+      mehreren synchronen quantitativen Grö{\ss}en und klar getrennten Skalen. \\
+    A3 & In vielen Länder-Stunden-Kombinationen Perioden mit ähnlicher Richtung,
+      starken Beträgen oder Richtungswechseln finden und als Detailzustand
+      auswählen. & Dichte zweidimensionale Übersicht mit Land und Zeit als
+      orthogonalen Dimensionen. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+A1 verlangt keine geografisch exakte Karte. Entscheidend ist die
+Nachbarschaftsbeziehung zu Deutschland; Distanzen zwischen Ländern sind für den
+Datensatz nicht definiert. A2 verlangt eine geordnete Zeitachse und quantitative
+Ablesbarkeit. A3 verlangt Überblick vor Detail, weil \(744\times11=8184\)
+physische Flusswerte nicht einzeln durchsucht werden sollen.
+
+Übergreifend muss ein gefundener Zustand zwischen den mentalen Modellen
+übersetzbar sein: Das in A3 entdeckte Pixel soll dasselbe Land im Beziehungsnetz
+und dieselbe Stunde in der Zeitreihe aktivieren. Koordinierte Ansichten senken
+diesen Übersetzungsaufwand. North und Shneiderman zeigen für
+Overview-and-Detail-Kopplungen Leistungsgewinne gegenüber unkoordinierten
+Ansichten \cite{north2000snap}.
+
+\subsection{Anforderungen an die Visualisierungen}
+\label{sec:anforderungen}
+
+Aus den Aufgaben werden folgende Anforderungen abgeleitet, weiterhin ohne
+einen bestimmten Diagrammtyp vorauszusetzen:
+
+\begin{description}[style=nextline]
+  \item[R1 -- Richtung und Betrag.] Positive und negative Flüsse müssen
+    unterscheidbar sein; der Betrag soll zusätzlich quantitativ oder zumindest
+    ordinal ablesbar bleiben.
+  \item[R2 -- Länderidentität.] Alle elf Partner müssen gleichzeitig erkennbar
+    und einzeln auswählbar sein.
+  \item[R3 -- gemeinsame Zeit.] Erzeugung, Preis und Länderfluss müssen auf
+    denselben Stundenschritt bezogen werden können.
+  \item[R4 -- absolute und relative Werte.] Die Anwendung muss Leistung in GW,
+    Preis in EUR/MWh und Erzeugungsanteile anzeigen, ohne unvereinbare Einheiten
+    auf eine gemeinsame Achse zu zwingen.
+  \item[R5 -- skalierbarer Überblick.] Ein voller Monat muss als Musterfläche
+    betrachtbar sein; für genaues Ablesen sind kleinere Zeitfenster nötig.
+  \item[R6 -- vergleichbare Kodierung.] Gleiche Farben müssen über Länder und
+    Zeitfenster dieselbe Bedeutung besitzen. Neutrale Werte dürfen nicht wie
+    fehlende Daten aussehen.
+  \item[R7 -- verknüpfte Selektion.] Jede Auswahl muss sichtbar sein und die
+    anderen Ansichten in einen konsistenten Zustand versetzen.
+  \item[R8 -- semantische Transparenz.] Einheit, Vorzeichen, Quelle und
+    Unsicherheiten müssen in der Oberfläche oder unmittelbar im Bericht
+    erklärt werden.
+\end{description}
+
+\subsection{Präsentation der Visualisierungen}
+\label{sec:praesentation}
+
+\subsubsection{Visualisierung Eins: gerichteter radialer Netzwerkgraph}
+\label{sec:vis1}
+
+Deutschland bildet den zentralen Knoten, elf Partnerländer liegen radial um
+ihn. Jede Kante ist gerichtet und gewichtet. Rot plus Pfeil nach Deutschland
+steht für Import; Blau plus Pfeil vom Zentrum steht für Export. Richtung wird
+damit redundant durch Geometrie und Farbe kodiert. Die Linienbreite bildet den
+absoluten CBPF-Betrag ab. Ein Tooltip ergänzt den exakten physischen und den
+kommerziellen Wert.
+
+Diese Darstellung erfüllt A1 und R1--R2 direkt: Beziehungen sind wichtiger als
+eine geografische Position, und alle Partner sind gleichzeitig sichtbar. Die
+Längen der Kanten tragen keine Datenbedeutung. Dadurch wird vermieden, dass
+eine schematische Länderposition als reale Leitungslänge interpretiert wird.
+Im Feedback zum zweiten Zwischenstand wirkten Pfeilspitzen zu gro{\ss} und starke
+Flüsse zu wenig differenziert. Die Marker wurden deshalb von 6 auf 4
+SVG-Einheiten verkleinert; die maximal mögliche Linienbreite wurde deutlich
+erhöht.
+
+Eine Europakarte wäre eine echte Alternative: Sie unterstützt geografische
+Orientierung und könnte reale Grenzlagen zeigen. Für nur elf Beziehungen zu
+einem Zentrum benötigt sie jedoch mehr Fläche, und lange Landesnamen sowie
+kleine Länder erschweren Auswahl und Beschriftung. Eine Tabelle wäre genauer,
+verliert aber das gerichtete Beziehungsmodell. Der radiale Graph priorisiert
+daher strukturellen Überblick, während Tooltips die exakte Zahl liefern.
+
+\subsubsection{Visualisierung Zwei: gestapelte Zeitreihe mit Flussdetail}
+\label{sec:vis2}
+
+Vier gestapelte Flächen zeigen die absolute Erzeugungsleistung in GW. Die
+linke Y-Achse beginnt bei null und wird aus dem sichtbaren Fenster auf einen
+lesbaren Maximalwert gerundet. Ein darunterliegender, zeitlich ausgerichteter
+Teilplot zeigt den CBPF-Wert des ausgewählten Partnerlands auf einer eigenen
+symmetrischen GW-Skala. Eine gestrichelte Vertikale verbindet beide Teilplots.
+Die Beschriftung ``+ Import nach Deutschland, -- Export aus Deutschland''
+erklärt das Vorzeichen sichtbar.
+
+Die Trennung der Skalen ist wesentlich: Erzeugungsleistungen von mehreren
+Zehner-GW und bilaterale Flüsse von wenigen GW wären auf derselben Achse nicht
+gleichzeitig lesbar. Die gemeinsame X-Achse erfüllt dennoch R3. Unter dem SVG
+stehen für die ausgewählte Stunde Gesamtleistung, absolute Gruppenwerte,
+Anteile, Preis und Länderfluss. So erfüllt die Ansicht R4, ohne den
+Day-Ahead-Preis als fachlich unpassende zweite Linie auf die Leistungsachse zu
+legen. Grundprinzipien zeitbezogener Datenvisualisierung sind ausführlich bei
+Aigner et al. beschrieben \cite{aigner2011time}.
+
+Als Alternative wäre ein 100-Prozent-Flächendiagramm geeignet, Anteile zu
+vergleichen. Es würde aber absolute Produktionsspitzen verbergen. Mehrere
+Small-Multiple-Linien wären für Einzeltechnologien präziser, erschweren jedoch
+das Ablesen der Gesamtleistung und benötigen mehr vertikale Fläche. Die
+gewählte Kombination zeigt den Gesamtumfang und die Zusammensetzung; die
+Detailkarten kompensieren das schwierigere Ablesen mittlerer Stapelschichten.
+
+\subsubsection{Visualisierung Drei: Pixelmatrix}
+\label{sec:vis3}
+
+Die Pixelmatrix ordnet Partnerländer zeilenweise und Stunden spaltenweise an.
+Jede Zelle verwendet eine divergierende Farbskala: gesättigtes Blau bedeutet
+starken Export, gesättigtes Rot starken Import, Hellgrau liegt nahe null. Eine
+einzige globale Grenze wird aus allen 8184 CBPF-Werten des Monats berechnet.
+Deshalb ist ein Rotton in der Frankreich-Zeile quantitativ mit demselben Ton in
+der Dänemark-Zeile und in jedem Zeitfenster vergleichbar. Die Legende benennt
+beide Skalenenden in GW.
+
+Die Matrix erfüllt A3 sowie R5--R6. Pixelorientierte Verfahren nutzen die
+Bildfläche effizient, weil jeder Messwert auf ein kleines farbiges Element
+abgebildet wird \cite{keim2000pixel}. Im zweiten Zwischenstand trennten wei{\ss}e
+Konturen die Zellen. Sie wurden entfernt, da Wei{\ss} sonst wie fehlende Daten
+wirken und schmale Muster zerschneiden konnte. Der neutrale Bereich ist jetzt
+bewusst hellgrau. Bei einer Auswahl markieren goldene Konturen die vollständige
+Zeile und Spalte; die aktive Zelle erhält zusätzlich eine dunkle Kontur.
+
+Elf übereinandergelegte Linien wären eine Alternative, erzeugten aber viele
+Überdeckungen und machten Ländervergleiche schwierig. Small Multiples mit elf
+separaten Linien böten bessere quantitative Ablesbarkeit, benötigten jedoch
+deutlich mehr Fläche. Die Pixelmatrix ist als Überblick und Auswahlwerkzeug
+konzipiert; exakte Werte werden nach Auswahl in Tooltip, Zeitreihe und
+Detailkarten gelesen.
+
+\subsection{Interaktion}
+\label{sec:interaktion}
+
+Die Kopplung folgt einem gemeinsamen Elm-Zustand. Ein Landklick im Netzwerk
+aktualisiert die Partnerauswahl; die Matrixzeile wird hervorgehoben und der
+untere Zeitreihenplot erscheint. Ein Klick auf die Zeitreihe aktualisiert die
+Zeitwahl; Netzwerkwerte, vertikale Markierung und Matrixspalte wechseln
+gleichzeitig. Eine Matrixzelle setzt beide Werte in einem Schritt.
+Diese Operation bietet einen zusätzlichen Vorteil gegenüber der ohnehin
+gemeinsamen X-Achse: Sie wählt zugleich eine von elf Länderdimensionen und eine
+Stunde.
+
+Die sichtbaren Zeitfenster 48 Stunden, sieben Tage und gesamter Monat erfüllen
+R5. Vor- und Zurück-Schaltflächen verschieben kleinere Fenster ohne
+Datenüberlauf. Beim Fensterwechsel bleibt die Partnerwahl erhalten; die
+Zeitwahl wird auf einen gültigen Index gesetzt. ``Auswahl zurücksetzen'' löscht
+den Länderfilter und setzt die Zeit an den Beginn des aktuellen Fensters.
+
+Nicht umgesetzt wurden freies Zoomen, Mehrfachauswahl und Sortieren der
+Matrixzeilen. Sie würden zusätzliche Zustände und Konflikte erzeugen, ohne für
+die drei Kernaufgaben nötig zu sein. Die feste Reihenfolge erleichtert
+Vergleiche zwischen Fenstern; drei wohldefinierte Zeitskalen sind für den
+Monatsdatensatz verständlicher als ein unbeschrifteter Zoomfaktor.

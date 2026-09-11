@@ -1,0 +1,45 @@
+\section{Zusammenfassung und Ausblick}
+\label{sec:fazit}
+
+Das Projekt beantwortet die Ausgangsfrage nicht mit einer einzelnen Kennzahl,
+sondern mit einem nachvollziehbaren Analyseweg. Der gerichtete Netzwerkgraph
+zeigt Deutschlands bilaterale Rolle zu einer Stunde. Die gestapelte Zeitreihe
+verbindet absolute Erzeugung, relative Anteile, Preis und einen ausgewählten
+Länderfluss. Die Pixelmatrix verdichtet 8184 physische Flusswerte zu einem
+Überblick und dient zugleich als zweidimensionales Auswahlwerkzeug. Ein
+gemeinsamer Elm-Zustand hält Land, Stunde und Zeitfenster konsistent.
+
+Für den Mai 2025 zeigt die Fallanalyse deutliche Preisunterschiede und einen
+starken negativen linearen Zusammenhang zwischen Preis und erneuerbarer
+Leistung. Gleichzeitig ist der Zusammenhang zwischen Preis und einfacher Summe
+der bilateralen physischen Flüsse schwach. Einzelne Länderbeziehungen können
+zudem kommerziell und physisch verschiedene Richtungen aufweisen. Damit liefert
+die Anwendung einen echten Mehrwert: Sie macht einfache Erklärungen prüfbar und
+führt von einem Muster unmittelbar zu konkreten absoluten Werten.
+
+Die Rückmeldungen zum zweiten Zwischenstand führten zu sichtbaren und
+fachlichen Verbesserungen: Einheiten sind aus der Energy-Charts-Dokumentation
+belegt, der Zeitraum ist begründet und auswählbar, Anforderungen stehen vor den
+Techniken, Vorzeichen und Skalen sind beschriftet, Pfeil- und Liniengrö{\ss}en sind
+angepasst, Matrixfarben sind global vergleichbar, wei{\ss}e Zelllücken entfernt und
+jede Fallstudie besitzt eine annotierte Abbildung.
+
+Sinnvolle Erweiterungen sind:
+
+\begin{itemize}
+  \item frei wählbare Start- und Enddaten sowie serverseitig erzeugte Exporte,
+  \item Drill-down von den vier Gruppen zu einzelnen Erzeugungstechnologien,
+  \item ein ergänzender Scatterplot für Preis--Erzeugungs-Zusammenhänge,
+  \item Vergleich physischer und kommerzieller Flüsse als Differenzansicht,
+  \item saisonale oder mehrjährige Aggregation mit Zoom und
+        Kalender-Hierarchie,
+  \item eine Nutzerstudie mit Studierenden und energiewirtschaftlich
+        Vorgebildeten.
+\end{itemize}
+
+Für längere Zeiträume müsste die Matrix aggregieren oder hierarchisch zoomen;
+sonst werden Stunden schmaler als wahrnehmbare Pixel. Au{\ss}erdem sollte eine
+künftige Analyse Nachfrage, installierte Leistung, Wetter und Netzengpässe
+einbeziehen, bevor kausale Aussagen über Preis oder Fluss entstehen. In der
+aktuellen Form bleibt das System bewusst ein exploratives Werkzeug mit klar
+begrenzter Aussagekraft.

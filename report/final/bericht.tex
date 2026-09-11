@@ -1,0 +1,113 @@
+\documentclass[11pt,a4paper,parskip=half]{scrartcl}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,top=24mm,bottom=24mm,left=25mm,right=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\crefname{section}{Abschnitt}{Abschnitte}
+\Crefname{section}{Abschnitt}{Abschnitte}
+\crefname{figure}{Abbildung}{Abbildungen}
+\Crefname{figure}{Abbildung}{Abbildungen}
+\crefname{table}{Tabelle}{Tabellen}
+\Crefname{table}{Tabelle}{Tabellen}
+
+\addtokomafont{section}{\sffamily\color{blue!35!black}}
+\addtokomafont{subsection}{\sffamily\color{blue!35!black}}
+\addtokomafont{subsubsection}{\sffamily\color{blue!35!black}}
+\setkomafont{caption}{\small}
+\setkomafont{captionlabel}{\bfseries}
+\setlist{nosep,leftmargin=1.6em}
+\renewcommand{\arraystretch}{1.15}
+\graphicspath{{../../experiments/figures/final/}}
+
+\definecolor{projectblue}{HTML}{1F334D}
+\definecolor{projectyellow}{HTML}{F2C94C}
+\definecolor{importred}{HTML}{C44545}
+\definecolor{exportblue}{HTML}{326DB6}
+\definecolor{renewgreen}{HTML}{63A35C}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  rulecolor=\color{black!20},
+  backgroundcolor=\color{black!2},
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\gw}{\,GW}
+\newcommand{\mwh}{\,EUR/MWh}
+\newcommand{\projectlink}[1]{\href{https://gitlab-lehre.informatik.uni-halle.de/aquhr/energiechart-visualisierungsprojekt}{#1}}
+
+\title{Deutschlands Rolle im europäischen Stromnetz\\[0.4em]
+  \large Eine interaktive Visual-Analytics-Anwendung mit Elm}
+\author{Jann Körner}
+\date{21. September 2026}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\sffamily\large Projektbericht zum Modul Informationsvisualisierung\par}
+  \vspace{0.3cm}
+  {\sffamily\large Sommersemester 2026\par}
+  \vfill
+  {\sffamily\bfseries\color{projectblue}\fontsize{25}{31}\selectfont
+    Deutschlands Rolle im europäischen Stromnetz\par}
+  \vspace{0.8cm}
+  {\sffamily\Large Eine interaktive Visual-Analytics-Anwendung mit Elm\par}
+  \vfill
+  {\large Jann Körner\par}
+  \vspace{0.35cm}
+  {\large 21. September 2026\par}
+  \vspace{1.2cm}
+  \begin{tikzpicture}
+    \fill[projectblue] (0,0) rectangle (11.6,0.20);
+    \fill[projectyellow] (0,0.25) rectangle (4.2,0.45);
+    \fill[exportblue] (4.3,0.25) rectangle (8.0,0.45);
+    \fill[importred] (8.1,0.25) rectangle (11.6,0.45);
+  \end{tikzpicture}
+  \vfill
+  {\small \projectlink{Quellcode und Anwendung im Hochschul-GitLab}\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\pagenumbering{arabic}
+
+\input{sections/01_einleitung}
+\input{sections/02_daten}
+\input{sections/03_visualisierungen}
+\input{sections/04_implementierung}
+\input{sections/05_anwendungsfaelle}
+\input{sections/06_verwandte_arbeiten}
+\input{sections/07_zusammenfassung}
+
+\appendix
+\input{sections/anhang_git_ki}
+
+\clearpage
+\bibliographystyle{plain}
+\bibliography{literatur}
+
+\end{document}

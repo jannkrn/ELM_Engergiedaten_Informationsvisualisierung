@@ -1,0 +1,146 @@
+\section{Implementierung}
+\label{sec:implementierung}
+
+\subsection*{Gesamtaufbau}
+
+Die Webanwendung ist mit Elm~0.19.1 implementiert und erzeugt alle drei
+Visualisierungen als SVG. Sie folgt The Elm Architecture mit den Schritten
+Model, View und Update \cite{elmArchitecture}. \Cref{fig:architecture} zeigt
+den Daten- und Zustandsfluss.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=11mm and 13mm,
+    box/.style={draw=projectblue,rounded corners,fill=blue!3,minimum width=35mm,minimum height=9mm,align=center},
+    arrow/.style={-{Latex[length=2.5mm]},thick,draw=projectblue}
+  ]
+    \node[box] (json) {\code{public/data/energy.json}\\744 Stunden per HTTP};
+    \node[box,below=of json] (api) {\code{Api.elm}\\Decoder und Fehlerzustand};
+    \node[box,below=of api] (main) {\code{Main.elm}\\Model, Update, Zeitfenster};
+    \node[box,below left=of main] (network) {\code{FlowNetwork.elm}\\Land wählen};
+    \node[box,below=of main] (time) {\code{TimeSeries.elm}\\Stunde wählen};
+    \node[box,below right=of main] (matrix) {\code{FlowMatrix.elm}\\Land und Stunde wählen};
+    \draw[arrow] (json) -- (api);
+    \draw[arrow] (api) -- (main);
+    \draw[arrow] (main) -- (network);
+    \draw[arrow] (main) -- (time);
+    \draw[arrow] (main) -- (matrix);
+    \draw[arrow,bend left=18] (network) to (main);
+    \draw[arrow,bend right=18] (time) to (main);
+    \draw[arrow,bend right=28] (matrix) to (main);
+  \end{tikzpicture}
+  \caption{Modulstruktur und gerichteter Datenfluss der Elm-Anwendung.}
+  \label{fig:architecture}
+\end{figure}
+
+Das Modul \code{Domain.elm} enthält die fachlichen Typen. \code{Api.elm}
+lädt und decodiert den normalisierten Datensatz per HTTP. Die Views sind
+zustandslos: Sie erhalten Daten und Callback-Funktionen, erzeugen SVG und senden
+bei Interaktion eine Nachricht an \code{Main.elm}. Dadurch können die drei
+Ansichten nicht unbemerkt auseinanderlaufen.
+
+\subsection*{Wichtigste Elm-Datenstrukturen}
+
+Der globale Zustand nach erfolgreichem Laden lautet verkürzt:
+
+\begin{lstlisting}[language={}]
+type alias State =
+    { dataset : Dataset
+    , selectedIndex : Int
+    , selectedPartner : Maybe String
+    , windowStart : Int
+    , windowSize : Int
+    }
+\end{lstlisting}
+
+\code{selectedIndex} ist ein globaler Index in den 744 Stunden. Für jede View
+wird daraus ein lokaler Index des sichtbaren Fensters gebildet.
+\code{selectedPartner} ist optional, weil die Erzeugungszeitreihe auch ohne
+Länderfilter sinnvoll bleibt. \code{windowStart} und \code{windowSize}
+definieren 48-Stunden-, 7-Tage- oder Monatsansicht.
+
+Die wichtigsten Nachrichten sind:
+
+\begin{lstlisting}[language={}]
+type Msg
+    = GotDataset (Result Http.Error Dataset)
+    | SelectPartner String
+    | SelectTime Int
+    | SelectCell String Int
+    | SetWindowSize Int
+    | MoveWindow Int
+    | Reset
+\end{lstlisting}
+
+\code{SelectCell} setzt Partner und Zeit atomar. \code{MoveWindow} begrenzt
+den neuen Start mit \code{clamp}; dadurch kann weder vor den ersten noch hinter
+den letzten Datensatz gesprungen werden. Ladefehler erzeugen einen sichtbaren
+Fehlerzustand statt einer leeren Seite.
+
+\subsection*{SVG-Berechnung}
+
+Der Netzwerkgraph berechnet Positionen auf einem Kreis aus Index und Anzahl der
+Partner. Ein quadratischer Bézier-Pfad verbindet jeden Partner mit dem
+deutschen Knoten. Das Vorzeichen bestimmt Reihenfolge der Endpunkte,
+Pfeilmarker und Farbe; \(1{,}5+\min(20,3{,}2|x|)\) bestimmt die Linienbreite.
+
+Die Zeitreihe summiert für jede Stunde die vier Gruppen. Für jede gestapelte
+Fläche wird eine obere und untere Punktfolge zu einem geschlossenen SVG-Pfad
+verbunden. Die Y-Skala wird aus dem Maximalwert des sichtbaren Fensters und
+einer gerundeten Schrittweite bestimmt. Der Länderfluss besitzt eine getrennte
+symmetrische Skala. Über jedem Stundenintervall liegt ein transparenter
+Trefferbereich, sodass die Auswahl nicht auf eine dünne Linie beschränkt ist.
+
+Die Pixelmatrix berechnet die Zellbreite aus Fensterlänge und verfügbarer
+Breite. Der Betrag wird durch das globale Maximum aller Monatswerte normiert;
+danach wird zwischen Hellgrau und Rot beziehungsweise Blau linear interpoliert.
+Die Farbnorm hängt somit nicht vom sichtbaren Fenster ab.
+
+\subsection*{Implementierungsaufwand und Entscheidungen}
+
+Relativ direkt war die Umsetzung des Elm-Grundgerüsts, der JSON-Decoder und
+einfacher SVG-Elemente auf Basis der Übungen. Aufwändiger waren die
+Vorverarbeitung heterogener View-Schemata, die korrekte Einheit von
+\code{v\_totalpower}, das Paginieren von mehr als 1000 Rohzeilen, gestapelte
+Flächenpfade, zwei quantitative Y-Skalen und die Umrechnung zwischen globalem
+und lokalem Zeitindex.
+
+Eine direkte Authentifizierung aus Elm wurde verworfen. Das Passwort müsste in
+einer öffentlichen Pages-Anwendung eingegeben oder der Token sichtbar werden.
+Stattdessen trennt die Pipeline geschützten Export und öffentliche Analyse. Die
+fertige JSON-Datei wird dennoch per HTTP geladen und kann unabhängig vom
+Entwicklungsrechner ausgeliefert werden.
+
+\subsection*{Prüfung und Bereitstellung}
+
+Der Produktionsbuild wurde mit folgendem Befehl erfolgreich erzeugt:
+
+\begin{lstlisting}[language={}]
+elm make src/Main.elm --optimize --output=public/elm.js
+\end{lstlisting}
+
+Ein automatisches Prüfskript validiert Datenumfang, lückenlose Stundenschritte,
+Partnerabdeckung und Wertebereiche. Im Browser wurden alle Auswahlpfade sowie
+Zeitraumwechsel manuell ausgeführt. Neue JavaScript- oder HTTP-Fehler traten im
+optimierten Build nicht auf. Ein reproduzierbares Capture-Skript wiederholt
+definierte Klickfolgen über das Browser-Debug-Protokoll. So entstehen die
+Berichtsabbildungen direkt aus der laufenden Elm-Anwendung.
+
+Die Datei \code{.gitlab-ci.yml} verwendet ein Node-Abbild, installiert die
+fixierte Elm-Version~0.19.1-6, kompiliert mit \code{--optimize} und publiziert
+den Ordner \code{public} über GitLab Pages. Quellcode und Anwendung liegen im
+\projectlink{öffentlichen Hochschul-GitLab-Projekt}. Die lokale Git-Historie
+ist im Anhang dokumentiert.
+
+\subsection*{Einsatz von KI}
+
+Für Entwürfe von Elm-Code, Python-Hilfsskripten, Dokumentation und Bericht wurde
+ausschlie{\ss}lich OpenAI Codex verwendet. Themenwahl, Rückfragen, fachliche
+Prioritäten und Abnahme lagen beim Verfasser. KI-Ausgaben wurden nicht ungeprüft
+übernommen: Der Code wurde kompiliert, Daten wurden mit unabhängigen
+Validierungsregeln geprüft, Interaktionen im Browser ausgeführt und jede Seite
+des erzeugten PDF visuell kontrolliert. Fehler und unklare Annahmen führten zu
+weiteren Prompts und Änderungen. Die relevanten Nutzereingaben sind nach
+Programmteil in \cref{app:ki} aufgeführt; KI-Ausgaben werden entsprechend der
+Vorgabe nicht wiederholt.

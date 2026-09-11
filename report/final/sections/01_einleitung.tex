@@ -1,0 +1,128 @@
+\section{Einleitung}
+\label{sec:einleitung}
+
+Deutschland ist nicht als isoliertes Stromsystem zu verstehen. Erzeugung,
+Verbrauch und Handel sind in einen europäischen Verbund eingebettet, während
+die tatsächlich gemessenen physikalischen Flüsse den elektrotechnischen
+Eigenschaften des Netzes folgen. Handelsmenge und physischer Grenzfluss können
+deshalb für dasselbe Länderpaar voneinander abweichen. Gleichzeitig verändern
+sich erneuerbare Erzeugung und Day-Ahead-Preis stündlich. Wer Deutschlands Rolle
+als Importeur oder Exporteur untersuchen möchte, muss daher räumliche,
+zeitliche und mehrdimensionale Zusammenhänge gemeinsam betrachten.
+
+Das Zielproblem dieses Projekts ist die explorative Analyse dieser
+Zusammenhänge in einer einzigen Webanwendung. Eine blo{\ss}e Tabelle beantwortet
+zwar einzelne Wertfragen, erschwert aber das Erkennen von Zeitmustern,
+Richtungswechseln und länderübergreifenden Unterschieden. Umgekehrt würde eine
+einzige aggregierte Kurve die Struktur der Partnerländer verdecken. Daraus
+ergibt sich die Forschungsfrage:
+
+\begin{quote}
+\itshape
+Wann ist Deutschland im betrachteten Zeitraum Stromimporteur oder
+Stromexporteur, mit welchen Ländern findet der physische Austausch statt und
+wie hängen diese Flüsse zeitlich mit Erzeugungsmix und Day-Ahead-Preis zusammen?
+\end{quote}
+
+Die Formulierung ist bewusst explorativ. Die Anwendung soll Muster sichtbar
+machen und konkrete Stunden vergleichbar machen; sie soll keine Kausalmodelle,
+Netzlastflussrechnung oder Herkunftsnachweise für einzelne Strommengen
+ersetzen. Insbesondere bedeutet zeitliche Gleichläufigkeit nicht, dass eine
+Erzeugungsart einen bestimmten Grenzfluss verursacht.
+
+Das Vorgehen orientiert sich am verschachtelten Prozessmodell von Munzner:
+Zuerst werden Anwendungssituation und Aufgaben beschrieben, danach folgen
+Daten- und Aufgabenabstraktion, visuelle Kodierung und schlie{\ss}lich die
+algorithmische Umsetzung \cite{munzner2009nested}. So wird vermieden, zuerst
+leicht implementierbare Diagramme auszuwählen und die Fragestellung im
+Nachhinein an diese anzupassen.
+
+\subsection{Anwendungshintergrund}
+\label{sec:hintergrund}
+
+Im europäischen Verbundnetz verbinden Grenzkuppelleitungen benachbarte
+Gebotszonen. Ein physischer Fluss beschreibt den gemessenen realen
+Leistungsaustausch über eine solche Grenze. Ein Handelsfluss ist dagegen ein
+kommerzielles Ergebnis gekoppelter Märkte. Physischer und kommerzieller Fluss
+stimmen im Allgemeinen nicht überein, weil elektrische Leistung nicht dem
+vertraglich gedachten kürzesten Weg folgt, sondern sich entsprechend der
+Netzimpedanzen auf Leitungen verteilt \cite{smardFlows}. Die Anwendung stellt
+beide Grö{\ss}en deshalb nicht gleich: Physische Flüsse bestimmen die grafische
+Richtung und Stärke, Handelswerte werden als zusätzlicher Detailwert im
+Tooltip gezeigt.
+
+Die betrachtete deutsche Erzeugung ist ein Leistungsmix aus erneuerbaren und
+konventionellen Technologien. Solar- und Windleistung variieren stark mit
+Tageszeit und Wetter. Kohle- und Gaserzeugung können sich ebenfalls ändern,
+unterliegen aber anderen technischen und wirtschaftlichen Randbedingungen.
+Der Day-Ahead-Preis für die Gebotszone Deutschland--Luxemburg ist ein
+Marktpreis pro Megawattstunde. Er kann negativ werden, wenn in einer Stunde ein
+hohes Angebot auf eine vergleichsweise geringe Nachfrage und begrenzte
+Flexibilität trifft. Die Visualisierung zeigt die zeitliche Gleichläufigkeit,
+nicht die vollständigen Ursachen des Preises.
+
+Energy-Charts stellt solche Daten durch das Fraunhofer-Institut für Solare
+Energiesysteme ISE bereit. Für dieses Projekt liegen Kopien als PostgreSQL-
+Views im Schema \code{energycharts} auf dem Seminarserver vor. Die offizielle
+API-Dokumentation definiert die Einheiten: \code{total\_power} in MW,
+grenzüberschreitende physische Flüsse (CBPF) und Handel (CBET) in GW sowie den
+Preis in EUR/MWh \cite{energychartsOpenapi}. Positive CBPF-/CBET-Werte bedeuten
+Import, negative Werte Export. Diese Definition ist die Grundlage sämtlicher
+Legenden und Vorzeichenangaben.
+
+\subsection{Zielgruppen}
+\label{sec:zielgruppen}
+
+Primäre Zielgruppe sind Studierende und fachlich interessierte Personen, die
+Grundbegriffe wie Leistung, Erzeugungsart, Import und Export kennen, aber keine
+spezielle Netzberechnungssoftware bedienen. Sie möchten Fragen wie
+``Mit welchem Land floss in dieser Stunde besonders viel Leistung?'' oder
+``Tritt ein negativer Preis gleichzeitig mit hoher erneuerbarer Erzeugung und
+bestimmten Exportmustern auf?'' ohne SQL-Abfrage beantworten.
+
+Eine zweite Zielgruppe sind Lehrende und energiewirtschaftlich Vorgebildete,
+die den Datensatz zur Demonstration oder für eine erste Hypothesenbildung
+nutzen. Von ihnen kann erwartet werden, dass sie Zeitreihen, positive und
+negative Achsen sowie divergende Farbskalen lesen können. Für beide Gruppen
+bleiben Einheiten, Vorzeichen und der Unterschied zwischen Physik und Handel
+sichtbar. Fachbegriffe werden im Bericht erklärt; die Anwendung setzt kein
+Wissen über Tabellennamen oder PostgREST voraus.
+
+Die zentralen Informationsbedürfnisse sind:
+
+\begin{itemize}
+  \item Überblick über Richtung und Stärke aller Länderbeziehungen zu einer
+        Stunde,
+  \item Erkennen zeitlicher Veränderungen von Erzeugungsmix und ausgewähltem
+        Länderfluss,
+  \item schnelles Auffinden von länder- und zeitbezogenen Mustern in vielen
+        Einzelwerten,
+  \item Ablesen absoluter Werte und relativer Erzeugungsanteile bei Bedarf,
+  \item Nachvollziehbarkeit der verwendeten Einheiten und Transformationen.
+\end{itemize}
+
+\subsection{Überblick und Beiträge}
+\label{sec:beitraege}
+
+Die Anwendung kombiniert einen gerichteten radialen Netzwerkgraphen, eine
+gestapelte Zeitreihe mit separater Flussachse und eine Pixelmatrix. Alle drei
+Ansichten verwenden denselben Partner- und Zeitindex. Ein Klick auf ein Land,
+eine Stunde oder eine Matrixzelle aktualisiert die übrigen Ansichten. Der
+Datensatz umfasst den gesamten Mai 2025 in stündlicher Auflösung.
+
+Die Beiträge des Projekts sind:
+
+\begin{enumerate}
+  \item eine auf Anwendungsaufgaben zurückgeführte Auswahl dreier
+        komplementärer Visualisierungstechniken aus den Bereichen Graphen,
+        Zeitreihen und pixelorientierte Verfahren;
+  \item eine reproduzierbare Datenpipeline von vier realen PostgreSQL-Views zu
+        einem sicheren, statisch auslieferbaren HTTP-Datensatz;
+  \item eine reine Elm-/SVG-Implementierung mit koordiniertem
+        Auswahlzustand, mehreren Zeitfenstern und Details-on-Demand;
+  \item eine fallbezogene Analyse des Mai 2025 einschlie{\ss}lich
+        Datenqualitäts-, Build- und Interaktionstests.
+\end{enumerate}
+
+Die öffentliche Projekthistorie, Quelltexte, Daten und der Bericht befinden
+sich im \projectlink{Hochschul-GitLab-Projekt}.

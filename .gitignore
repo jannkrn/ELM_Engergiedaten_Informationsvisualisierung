@@ -28,4 +28,6 @@ Thumbs.db
 *.out
 *.run.xml
 *.synctex.gz
+*.xdv
+report/final/rendered/
 *.toc

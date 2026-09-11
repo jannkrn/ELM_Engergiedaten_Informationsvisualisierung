@@ -1,0 +1,51 @@
+\section{Verwandte Arbeiten}
+\label{sec:related}
+
+Steiger et al. verbinden ein regelbasiertes Expertensystem mit mehreren
+koordinierten Ansichten für die Überwachung eines Smart Grids
+\cite{steiger2013smartgrid}. Eine Übersicht zeigt Zustände verteilter
+Netzelemente; eine Analyseansicht macht den Verarbeitungspfad von Alarmen
+nachvollziehbar. Gemeinsam mit diesem Projekt sind der Energiekontext,
+Details-on-Demand und die Selektion eines Elements, die eine zweite Ansicht
+aktualisiert. Der Unterschied liegt im Analyseziel: Steiger et al. unterstützen
+operative Störungsdiagnose und erklären automatische Regeln. Die vorliegende
+Anwendung arbeitet retrospektiv mit länderbezogenen Flüssen, Erzeugung und
+Preis; sie enthält weder Alarmmodell noch Handlungsempfehlung.
+
+Jäger et al. untersuchen die Kombination topologischer und geografischer
+Information für das Management elektrischer Ausfälle
+\cite{jaeger2016outage}. Ihre Designstudie zeigt, dass getrennte Räume einen
+mentalen Abgleich verlangen, und nutzt interaktives Brushing-and-Linking. Das
+stützt die Entscheidung, Länderbeziehung und Zeitmuster koordiniert zu zeigen.
+Anders als dort ist Geografie für die Projektaufgabe keine zwingende
+Datendimension: Die Abstände und Formen der Länder erklären weder Flussbetrag
+noch Handel. Deshalb ersetzt ein kompakter radialer Graph die Kartenansicht.
+Eine künftige Erweiterung könnte eine Karte ergänzen, wenn reale
+Grenzkuppelleitungen und räumliche Engpässe einbezogen werden.
+
+AMPLIO VQA von Stoffel et al. analysiert Simulationen für die Planung eines
+Microgrid-Erzeugungsmixes \cite{stoffel2012amplio}. Beide Systeme behandeln
+mehrdimensionale zeitbezogene Energiedaten und kombinieren Überblick,
+Interaktion und Detail. AMPLIO vergleicht jedoch parametrisierte
+Planungsszenarien und unterstützt visuelle Anfragen; dieses Projekt untersucht
+gemessene historische Daten und einen nationalen grenzüberschreitenden
+Austausch. Die gestapelte Zeitreihe ähnelt dem gemeinsamen Bedarf, einen Mix
+über Zeit zu verstehen, während Netzwerk und Pixelmatrix speziell aus den
+Dimensionen Partnerland und Stunde abgeleitet sind.
+
+Methodisch steht die Anwendung in der Tradition koordinierter multipler
+Ansichten. North und Shneiderman beschreiben Koordination als Grundlage für
+Brushing-and-Linking und Overview-and-Detail \cite{north2000snap}. Die
+vorliegende Implementierung erlaubt Nutzenden zwar nicht, Ansichten frei zu
+konfigurieren, realisiert aber eine feste, domänenspezifische Kopplung über
+Land und Zeit. Die Pixelmatrix folgt dem Prinzip pixelorientierter Techniken,
+möglichst viele Einzelwerte gleichzeitig auf Bildschirmfläche abzubilden
+\cite{keim2000pixel}; anders als allgemeine hochdimensionale Verfahren nutzt
+sie eine fachlich feste Ordnung der Achsen.
+
+Insgesamt unterscheidet sich das Projekt von den drei Energiearbeiten durch
+die konkrete Kombination aus bilateralem Ländergraph, Erzeugungs-/Flusszeitreihe
+und Länder-Stunden-Matrix auf realen Energy-Charts-Daten. Es ist kleiner und
+nicht als Leitwartenwerkzeug evaluiert. Sein Beitrag liegt in einer
+nachvollziehbaren, auf eine Lehr- und Explorationszielgruppe zugeschnittenen
+Integration, nicht in einem neuen Visualisierungsalgorithmus.
