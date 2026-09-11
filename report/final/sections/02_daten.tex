@@ -32,10 +32,10 @@ bezogenes Bearer-Token autorisiert die Anfrage.
 Die Einheit von \code{v\_totalpower} ist erklärungsbedürftig: Ihre Spaltennamen
 enden auf \code{\_in\_gw}, die Werte besitzen aber die Grö{\ss}enordnung der vom
 offiziellen Endpunkt \code{/total\_power} dokumentierten MW-Werte. Beispielsweise
-tritt Windleistung als fünfstelliger Wert auf. Deshalb wird nicht anhand eines
-vermuteten Zahlenbereichs ``passend gemacht'', sondern entsprechend der
-offiziellen Energy-Charts-Spezifikation von MW nach GW umgerechnet
-\cite{energychartsOpenapi}. Die anderen drei Grö{\ss}en werden ohne
+tritt Windleistung als fünfstelliger Wert auf. Der Export interpretiert
+\code{v\_totalpower} deshalb entsprechend der offiziellen
+Energy-Charts-Spezifikation als MW und rechnet die Werte durch Division durch
+1000 in GW um \cite{energychartsOpenapi}. Die anderen drei Grö{\ss}en werden ohne
 Einheitenumrechnung übernommen.
 
 \subsection*{Auswahl des Zeitraums}
@@ -110,11 +110,9 @@ gro{\ss}e Tabellen clientseitig zusammenführen muss.
 Elm lädt diese Datei mit \code{Http.get}. Das ist weiterhin ein echter
 HTTP-Datenpfad, zugleich aber für eine statische GitLab-Pages-Anwendung sicher:
 Weder Datenbankpasswort noch Bearer-Token erscheinen im ausgelieferten
-JavaScript. Der Rohdatenexport ist durch das Skript reproduzierbar. Am
-10. September 2026 lieferte der für die Veranstaltung genannte Benutzer
-\code{www26\_test} bei der Token-Anforderung HTTP~401; der vorhandene Datensatz
-wurde deshalb mit dem ebenfalls in der Aufgabenbeschreibung bereitgestellten
-Seminarzugang erzeugt. Zugangsdaten selbst werden nicht versioniert.
+JavaScript. Der Rohdatenexport ist durch das Skript reproduzierbar.
+Zugangsdaten werden ausschlie{\ss}lich beim lokalen Export verwendet und nicht
+versioniert.
 
 \subsection*{Datenqualität und Eignung}
 

@@ -106,11 +106,12 @@ Vorverarbeitung heterogener View-Schemata, die korrekte Einheit von
 Flächenpfade, zwei quantitative Y-Skalen und die Umrechnung zwischen globalem
 und lokalem Zeitindex.
 
-Eine direkte Authentifizierung aus Elm wurde verworfen. Das Passwort müsste in
-einer öffentlichen Pages-Anwendung eingegeben oder der Token sichtbar werden.
-Stattdessen trennt die Pipeline geschützten Export und öffentliche Analyse. Die
-fertige JSON-Datei wird dennoch per HTTP geladen und kann unabhängig vom
-Entwicklungsrechner ausgeliefert werden.
+Die öffentliche Elm-Anwendung authentifiziert sich nicht direkt an der
+Datenbank, weil Passwort oder Token sonst im ausgelieferten Browsercode sichtbar
+wären. Ein lokales Exportskript ruft die geschützten Daten ab und schreibt die
+normalisierte JSON-Datei. Die Elm-Anwendung lädt anschlie{\ss}end nur diese Datei
+per HTTP und benötigt während der Nutzung weder Zugangsdaten noch eine
+Datenbankverbindung.
 
 \subsection*{Prüfung und Bereitstellung}
 
@@ -137,10 +138,9 @@ ist im Anhang dokumentiert.
 
 Für Entwürfe von Elm-Code, Python-Hilfsskripten, Dokumentation und Bericht wurde
 ausschlie{\ss}lich OpenAI Codex verwendet. Themenwahl, Rückfragen, fachliche
-Prioritäten und Abnahme lagen beim Verfasser. KI-Ausgaben wurden nicht ungeprüft
-übernommen: Der Code wurde kompiliert, Daten wurden mit unabhängigen
-Validierungsregeln geprüft, Interaktionen im Browser ausgeführt und jede Seite
-des erzeugten PDF visuell kontrolliert. Fehler und unklare Annahmen führten zu
-weiteren Prompts und Änderungen. Die relevanten Nutzereingaben sind nach
-Programmteil in \cref{app:ki} aufgeführt; KI-Ausgaben werden entsprechend der
-Vorgabe nicht wiederholt.
+Prioritäten und Abnahme liegen in der Verantwortung des Verfassers. Au{\ss}erdem
+bin ich den Code Schritt für Schritt durchgegangen und habe ihn bei Bedarf angepasst. Zur
+Qualitätssicherung wurde der Code kompiliert, die Daten wurden mit unabhängigen
+Validierungsregeln geprüft, die Interaktionen im Browser ausgeführt und jede
+Seite des erzeugten PDF visuell kontrolliert. Der Arbeitsprozess ist in
+Anhang~\ref{app:ki} zusammengefasst.

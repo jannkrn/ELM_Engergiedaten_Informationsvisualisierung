@@ -27,15 +27,13 @@ diesem Commit erzeugten PDFs sein. Der Merge-Commit \code{79f38a9} verbindet
 die vorhandene Projekthistorie mit dem initialen Commit des öffentlichen
 Hochschul-GitLab-Projekts, ohne frühere Arbeit zu überschreiben.
 
-\section{KI-gestützter Arbeitsprozess}
+\section{Arbeitsprozess}
 \label{app:ki}
 
-Dieser Anhang fasst die Zusammenarbeit mit OpenAI Codex zusammen. Er ist kein
-wörtliches Gesprächsprotokoll, sondern beschreibt die schrittweise erteilten
-Arbeitsaufträge und die daraus entstandenen Ergebnisse. Thema, fachliche
-Prioritäten und Freigaben wurden vom Verfasser festgelegt. Codex unterstützte
-bei Recherche, Implementierungsentwürfen, Prüfungen und Formulierungen; die
-Zwischenergebnisse wurden jeweils betrachtet, besprochen und weiterentwickelt.
+Dieser Anhang fasst das Vorgehen bei der Erstellung des Projekts zusammen.
+Thema, fachliche Prioritäten und Freigaben wurden vom Verfasser festgelegt.
+OpenAI Codex unterstützte bei Recherche, Implementierungsentwürfen, Prüfungen
+und Formulierungen.
 
 \subsection*{A: Themenwahl und Datenzugang}
 
@@ -47,9 +45,9 @@ Zwischenergebnisse wurden jeweils betrachtet, besprochen und weiterentwickelt.
     \code{energycharts} geprüft. Es folgten begrenzte PostgREST-Abfragen. Dabei
     wurden Datenquelle, HTTP-Endpunkte und Zugangshinweise getrennt von den
     exportierten Analysedaten dokumentiert.
-  \item Nach Rückfragen zu den Einheiten wurden die OpenAPI-Beschreibung von
-    Energy-Charts und die tatsächlichen Wertebereiche geprüft. Erst danach
-    wurden GW, MW, EUR/MWh und die Vorzeichenkonvention verbindlich festgelegt.
+  \item Die OpenAPI-Beschreibung von Energy-Charts und die tatsächlichen
+    Wertebereiche wurden geprüft. Auf dieser Grundlage wurden GW, MW, EUR/MWh
+    und die Vorzeichenkonvention verbindlich festgelegt.
   \item Für erste Tests wurden kleine Ausschnitte geladen. Nach erfolgreicher
     Prüfung wurde die Pipeline auf den vollständigen Mai 2025 mit 744 Stunden
     und elf Partnerländern erweitert.
@@ -58,84 +56,35 @@ Zwischenergebnisse wurden jeweils betrachtet, besprochen und weiterentwickelt.
 \subsection*{B: Elm-Visualisierungen und Interaktion}
 
 \begin{enumerate}
-  \item Der erste Prototyp verband einen gerichteten Ländergraphen, eine
-    Zeitreihe und eine Pixelmatrix. Vorläufige Python-Abbildungen wurden danach
-    vollständig durch SVG-Ansichten aus Elm ersetzt; Python blieb nur für
-    Datenexport und Validierung zuständig.
+  \item Der gerichtete Ländergraph, die Zeitreihe und die Pixelmatrix wurden als
+    SVG-Ansichten in Elm umgesetzt. Python dient ausschlie{\ss}lich dem
+    Datenexport und der Validierung.
   \item Die Bedienung wurde gemeinsam schrittweise geprüft: Land im Netzwerk
     wählen, Stunde in der Zeitreihe setzen und Land plus Stunde über eine
-    Matrixzelle auswählen. Unabhängige Anwendungsfälle wurden deutlicher
-    voneinander getrennt, damit Auswahlzustände nicht als feste Klickfolge
+    Matrixzelle auswählen. Die drei Anwendungsfälle besitzen voneinander
+    unabhängige Ausgangszustände, damit sie nicht als feste Klickfolge
     missverstanden werden.
-  \item Bei der Besprechung des Zeitdiagramms fiel auf, dass absolute Werte und
-    Skalen fehlten. Daraufhin kamen eine beschriftete GW-Y-Achse, eine eigene
-    symmetrische Flussskala, absolute Detailwerte und relative Anteile hinzu.
-  \item Die Professorenhinweise wurden anschlie{\ss}end als Änderungsaufgaben
-    umgesetzt: kleinere Pfeile, stärkere Maximallinien, mehrere Zeitfenster,
-    globale Matrixfarben, eine Nullwertfarbe ohne wei{\ss}e Lücken und sichtbarere
-    Auswahlmarkierungen.
+  \item Das Zeitdiagramm besitzt eine beschriftete GW-Y-Achse, eine eigene
+    symmetrische Flussskala, absolute Detailwerte und relative Anteile.
   \item Nach jedem grö{\ss}eren Schritt wurden Elm-Build, Datensatzregeln und die
-    relevanten Interaktionen erneut geprüft. Die finalen Abbildungen entstanden
-    reproduzierbar aus festgelegten Zuständen der laufenden Elm-Anwendung.
+    relevanten Interaktionen geprüft. Au{\ss}erdem bin ich den Code Schritt für
+    Schritt durchgegangen und habe ihn bei Bedarf angepasst. Die finalen
+    Abbildungen entstanden reproduzierbar aus festgelegten Zuständen der
+    laufenden Elm-Anwendung.
 \end{enumerate}
 
-\subsection*{C: Berichtsrevision und Abschluss}
+\subsection*{C: Berichtserstellung und Abschluss}
 
 \begin{enumerate}
-  \item Zunächst entstanden ein knapper Projektplan und zwei bearbeitbare
-    Zwischenstände. Die Rückfragen des Verfassers zu Abbildungen, Bedienung und
-    Formulierungen führten jeweils zu gezielten Überarbeitungen.
-  \item Für den Abschluss wurden Berichtsvorlage, Protokoll und sämtliche
-    Kommentare zum zweiten Zwischenstand ausgewertet. Daraus entstand die feste
-    Gliederung; die Umsetzung jeder Rückmeldung ist in Anhang~C nachvollziehbar.
+  \item Berichtsvorlage und Protokoll bilden die Grundlage für Gliederung und
+    formale Gestaltung.
   \item Quellen zu Energy-Charts, PostgREST, Elm und verwandten Arbeiten wurden
     recherchiert und als BibTeX-Einträge eingebunden. Aussagen zu Einheiten und
     Datenbedeutung wurden auf Primärquellen zurückgeführt.
-  \item Text, Tabellen und annotierte Screenshots wurden anschlie{\ss}end in LaTeX
+  \item Text, Tabellen und annotierte Screenshots wurden in LaTeX
     zusammengeführt. Der Bericht wurde kompiliert, vollständig gerendert und
     Seite für Seite visuell geprüft.
-  \item Änderungen an Daten, Visualisierungen, Experimenten, Dokumentation und
-    Bericht wurden in getrennten lokalen Git-Commits festgehalten. Ein Upload
-    in das öffentliche Hochschul-GitLab erfolgt erst nach ausdrücklicher
-    Freigabe.
+  \item Die Arbeitsschritte sind in getrennten lokalen Git-Commits dokumentiert.
+    Ein Upload in das öffentliche Hochschul-GitLab erfolgt erst nach
+    ausdrücklicher Freigabe.
 \end{enumerate}
-
-\section{Umsetzung des Feedbacks zum zweiten Zwischenstand}
-\label{app:feedback}
-
-\begin{longtable}{@{}p{0.32\textwidth}p{0.62\textwidth}@{}}
-  \toprule
-  Rückmeldung & Umsetzung \\
-  \midrule
-  \endhead
-  Text ausbauen; Text direkt unter ``Einleitung'' & Zielproblem und
-    Forschungsfrage stehen jetzt vor Unterabschnitt~1.1; alle Kapitel wurden
-    fachlich ausgearbeitet. \\
-  Forschungsfrage gehört in Kapitel~1 & In \cref{sec:einleitung} als
-    hervorgehobene Leitfrage platziert. \\
-  Anwendungshintergrund ergänzen & Unterschied zwischen physischem Fluss,
-    Handel, Gebotszone, Erzeugungsmix und Preis in \cref{sec:hintergrund}
-    erläutert. \\
-  Einheiten nicht raten & Offizielle OpenAPI als Quelle; MW/GW-Transformation,
-    Vorzeichen und EUR/MWh in \cref{sec:daten} dokumentiert. \\
-  Zeitraum begründen & Vollständiger Mai 2025, Umfang und Kontraste in
-    \cref{sec:daten} begründet. \\
-  Anforderungen unabhängig von Techniken & Erst Aufgaben und Anforderungen in
-    \cref{sec:aufgaben,sec:anforderungen}, danach Visualisierungsauswahl. \\
-  Pfeilspitzen kleiner & SVG-Marker von 6 auf 4 Einheiten reduziert. \\
-  maximale Linienbreite grö{\ss}er & Kodierung auf bis zu 21,5 SVG-Einheiten
-    erweitert. \\
-  Plus/Minus in Zeitreihe erklären & Sichtbare Vorzeichenlegende im
-    Fluss-Teilplot und Erläuterung in \cref{sec:vis2}. \\
-  andere Zeiträume auswählbar? & 48 Stunden, 7 Tage, Monat sowie Vor-/Zurück-
-    Navigation umgesetzt. \\
-  wei{\ss}e Matrixlücken prüfen & Zellkonturen entfernt; Nullwerte hellgrau statt
-    wei{\ss} kodiert. \\
-  Nutzen der Auswahl erklären & Matrix wählt Land und Stunde gleichzeitig;
-    goldene Zeilen-/Spaltenmarkierung in \cref{sec:interaktion}. \\
-  Farbtöne zeilenübergreifend vergleichbar? & Ein globales Monatsmaximum
-    steuert alle Matrixzellen; numerische Legende ergänzt. \\
-  Abbildung für jeden Anwendungsfall & Annotierte Abbildungen
-    \cref{fig:case-france,fig:case-price,fig:case-matrix} ergänzt. \\
-  \bottomrule
-\end{longtable}

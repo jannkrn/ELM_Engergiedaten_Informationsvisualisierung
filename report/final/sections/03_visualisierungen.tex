@@ -105,10 +105,9 @@ Diese Darstellung erfüllt A1 und R1--R2 direkt: Beziehungen sind wichtiger als
 eine geografische Position, und alle Partner sind gleichzeitig sichtbar. Die
 Längen der Kanten tragen keine Datenbedeutung. Dadurch wird vermieden, dass
 eine schematische Länderposition als reale Leitungslänge interpretiert wird.
-Im Feedback zum zweiten Zwischenstand wirkten Pfeilspitzen zu gro{\ss} und starke
-Flüsse zu wenig differenziert. Die Marker wurden deshalb von 6 auf 4
-SVG-Einheiten verkleinert; die maximal mögliche Linienbreite wurde deutlich
-erhöht.
+Die Pfeilmarker besitzen eine Länge von 4 SVG-Einheiten. Die Linienbreite wird
+abhängig vom absoluten Flussbetrag bis auf 21,5 SVG-Einheiten skaliert, sodass
+auch starke Flüsse deutlich voneinander unterscheidbar bleiben.
 
 Eine Europakarte wäre eine echte Alternative: Sie unterstützt geografische
 Orientierung und könnte reale Grenzlagen zeigen. Für nur elf Beziehungen zu
@@ -157,11 +156,11 @@ beide Skalenenden in GW.
 
 Die Matrix erfüllt A3 sowie R5--R6. Pixelorientierte Verfahren nutzen die
 Bildfläche effizient, weil jeder Messwert auf ein kleines farbiges Element
-abgebildet wird \cite{keim2000pixel}. Im zweiten Zwischenstand trennten wei{\ss}e
-Konturen die Zellen. Sie wurden entfernt, da Wei{\ss} sonst wie fehlende Daten
-wirken und schmale Muster zerschneiden konnte. Der neutrale Bereich ist jetzt
-bewusst hellgrau. Bei einer Auswahl markieren goldene Konturen die vollständige
-Zeile und Spalte; die aktive Zelle erhält zusätzlich eine dunkle Kontur.
+abgebildet wird \cite{keim2000pixel}. Die Zellen besitzen keine wei{\ss}en
+Trennkonturen, damit Lücken nicht als fehlende Daten wirken und schmale Muster
+nicht zerschnitten werden. Der neutrale Bereich ist bewusst hellgrau. Bei einer
+Auswahl markieren goldene Konturen die vollständige Zeile und Spalte; die aktive
+Zelle erhält zusätzlich eine dunkle Kontur.
 
 Elf übereinandergelegte Linien wären eine Alternative, erzeugten aber viele
 Überdeckungen und machten Ländervergleiche schwierig. Small Multiples mit elf
