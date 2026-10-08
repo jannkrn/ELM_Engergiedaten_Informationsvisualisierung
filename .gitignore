@@ -31,3 +31,6 @@ Thumbs.db
 *.xdv
 report/final/rendered/
 *.toc
+
+#Erstellungsskripts
+/erstellungen/
